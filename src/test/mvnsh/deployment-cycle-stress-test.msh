@@ -1,0 +1,64 @@
+# This file is used to verify that undeploying etimesheet doesn't leak a classloader, which causes a
+# PermGen out of memory problem when repeatedly deploying and undeploying.
+# The goal is to allow developers to repeatedly redeploy the app without worrying about having to restart jboss, which is
+# timeconsuming.
+# 
+
+source src/build/mvnsh/aliases.msh
+
+cd etimesheet-webapp
+mvn package
+start-jboss-and-deploy
+undeploy
+
+# redeploy 50 times
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy
+deploy; undeploy

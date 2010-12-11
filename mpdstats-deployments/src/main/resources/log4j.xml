@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  Log4j Configuration                                                  -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<!--
+   | For more configuration information and examples see the Jakarta Log4j
+   | website: http://jakarta.apache.org/log4j
+ -->
+
+<!-- 
+  Note: for logging on Jboss, you aren't supposed to deploy a log4j.xml file with your webapp; instead, you're supposed
+  to edit jboss_home/server/default/conf.jboss-log4j.xml.  So, copy appropriate stuff below and paste it there.
+ -->
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+	 <appender name="rollingFile" class="org.apache.log4j.rolling.RollingFileAppender">
+	   <layout class="org.apache.log4j.PatternLayout">
+	     <param name="ConversionPattern" value="%-5p %d{dd-MM HH:mm:ss,SSS} [%c] (%t %X{username}) %m%n"/>
+	   </layout>
+	   <rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+	     <param name="FileNamePattern" value="${catalina.base}/logs/eTimesheet-%d.log"/>
+	     <param name="ActiveFileName" value="${catalina.base}/logs/eTimesheet.log"/>
+	   </rollingPolicy>
+	 </appender>
+	
+
+    <!-- used for non-eTimesheet (appserver-ish) errors -->
+	<appender name="emailErrors"  class="org.apache.log4j.net.SMTPAppender">
+        <param name="BufferSize" value="20" /> 
+        <param name="SMTPHost" value="smtp1.ccci.org" />
+        <param name="From" value="eTimesheet@uscm.org" />
+        <param name="To" value="matt.drees@uscm.org" />
+        <param name="Subject" value="CRS Error" />
+        <layout class="org.apache.log4j.HTMLLayout">
+            <param name="ConversionPattern"
+              value="%d{ISO8601}%p%c%X{username}%m" />
+        </layout>
+    </appender>
+
+    <!-- used for eTimesheet errors -->
+	<appender name="errorReporting"  class="org.uscm.crs.debug.ExceptionHandlingItegrationAppender">
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%-5p %d{MM-dd HH:mm:ss,SSS} [%C.%M():%L] %m%n"/>
+      </layout>
+    </appender>
+
+   <appender name="console" class="org.apache.log4j.ConsoleAppender">
+      <param name="Target" value="System.out"/>
+
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%-5p %d{MM-dd HH:mm:ss,SSS} [%C.%M():%L] (%X{username}) %m%n"/>
+      </layout>
+   </appender>
+
+   <category name="org.ccci.">
+      <priority value="debug"/>
+   </category>
+
+
+   <logger name="org.jboss.seam">
+      <level value="info"/>
+   </logger>
+ 
+   <logger name="org.hibernate">
+      <level value="warn"/>
+   </logger>
+
+   <logger name="org.jboss.seam.jsf.SeamPhaseListener">
+      <!-- SeamPhaseListener logs exceptions when it shouldn't; exception handling code should do the logging -->
+      <level value="fatal"/>
+   </logger>
+ 
+   <logger name="org.apache.catalina">
+      <appender-ref ref="emailErrors"/>
+   </logger>
+
+   <!-- when debug stuff errors (except ExceptionLogger; see below), attempt to send via log4j -->
+   <logger name="org.ccci.debug">
+      <appender-ref ref="emailErrors"/>
+   </logger>
+
+  <!-- 
+    This logger is used to print exception info to the console after the request completes.  It
+    does not need to be emailed, since an email report will be sent separately.
+   -->
+   <logger name="org.ccci.debug.ExceptionLogger" 
+      additivity="false">
+      <appender-ref ref="console"/>
+      <!-- 
+      <appender-ref ref="rollingFile"/>
+       -->
+   </logger>
+
+   <root>
+      <level value="info"/>
+      <appender-ref ref="errorReporting"/>
+      <appender-ref ref="console"/>
+      <!-- 
+      <appender-ref ref="rollingFile"/>
+       -->
+   </root>
+
+</log4j:configuration>

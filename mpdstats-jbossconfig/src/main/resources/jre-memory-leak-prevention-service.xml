@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server>
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  JRE Memory Leak Prevention Service                                   -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<server>
+
+  <mbean code="org.ccci.jboss.memory.JreMemoryLeakPreventionService" 
+         name="org.ccci.jboss.memory:service=JreMemoryLeakPreventionService">
+  </mbean>
+
+</server>

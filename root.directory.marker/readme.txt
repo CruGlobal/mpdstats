@@ -1,0 +1,1 @@
+This directory is used by the maven-find-plugin, configured in pom.xml.  See it for more details.

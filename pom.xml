@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.ccci</groupId>
+  <artifactId>mpdstats</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>MPD Stats</name>
+  
+  <modules>
+    <module>mpdstats-webapp</module>
+    <module>mpdstats-model</module>
+    <module>mpdstats-pshcm-persistence</module>
+    <module>mpdstats-deployments</module>
+    <module>mpdstats-db</module>
+    <module>mpdstats-jbossconfig</module>
+  </modules>
+  
+  <distributionManagement>
+    <repository>
+      <id>artifacts.ccci.org-releases</id>
+      <name>artifacts.ccci.org-releases</name>
+      <url>http://arkham.ccci.org:80/artifactory/libs-releases-local</url>
+    </repository>
+  
+    <snapshotRepository>
+      <id>artifacts.ccci.org-snapshots</id>
+      <name>artifacts.ccci.org-snapshots</name>
+      <url>http://arkham.ccci.org:80/artifactory/libs-snapshots-local</url>
+    </snapshotRepository>
+  </distributionManagement>
+  
+  <repositories>
+    <repository>
+      <id>ccci-libs-releases</id>
+      <name>Libraries (Full Releases)</name>
+      <url>http://arkham.ccci.org/artifactory/libs-releases</url>
+    </repository>
+  </repositories>
+    
+  <pluginRepositories>
+    <pluginRepository>
+      <id>ccci-plugins-releases</id>
+      <name>Plugins Repository (Full Releases)</name>
+      <url>http://arkham.ccci.org/artifactory/plugins-releases</url>
+    </pluginRepository>
+  </pluginRepositories>
+    
+  <issueManagement>
+    <system>Jira</system>
+    <url>http://itwiki.ccci.org/jira/browse/SSW</url>
+  </issueManagement>
+
+  <ciManagement>
+    <system>Bamboo</system>
+  </ciManagement>
+    
+  <scm>
+    <connection>scm:svn:http://arkham.ccci.org/svn/java/trunk/apps/webapp-mpdstats/</connection>
+    <developerConnection>scm:svn:http://arkham.ccci.org/svn/java/trunk/apps/webapp-mpdstats/</developerConnection>
+      <!-- no fisheye yet: -->
+    <url>scm:svn:http://arkham.ccci.org/svn/java/trunk/apps/webapp-mpdstats/</url>
+  </scm>
+        
+        
+  <build>
+  <!-- todo: much of this is copy/pasted from etimesheet and CCP -->
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.4</version>
+          <configuration>
+            
+            <!-- 
+              Note: the default uses '@' as a delimiter, and this burned me pretty bad when I had an email address in
+              an xml file that needed to be filtered, and prevented filtering for the entire rest of the file.
+              So, I would like to remove '@' as a delimiter.  However, it doesn't look like I can, even with specifying
+              just the ${} as a delimiter.
+              
+            <delimiters>
+              <delimiter>${*}</delimiter>
+            </delimiters>
+            
+            oh, and this doesn't seem to have an affect on single @ symbols in xml config docs, as you'd expect:
+            <escapeString>\</escapeString>
+             -->
+          </configuration>
+        </plugin>
+      
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>          
+          <version>2.3.2</version>
+          <configuration>
+            <source>${java.source.version}</source>
+            <target>${java.source.version}</target>
+          </configuration>
+          
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>2.4.1</version>
+        </plugin>
+        
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-help-plugin</artifactId>
+          <version>2.1.1</version>
+        </plugin>
+        
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <executions>
+          <!-- 
+            <execution>
+              <id>test-testng</id>
+              <phase>test</phase>
+              <goals>
+                <goal>test</goal>
+              </goals>
+              <configuration> 
+                <junitArtifactName>none:none</junitArtifactName>
+              </configuration>
+            </execution>
+           -->
+            <execution>
+              <phase>test</phase>
+              <id>default-test</id>
+              <goals>
+                <goal>test</goal>
+              </goals>
+              <configuration> 
+                <testNGArtifactName>none:none</testNGArtifactName>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+                
+        <plugin>
+            <groupId>com.atlassian.maven.plugins</groupId>
+            <artifactId>maven-clover2-plugin</artifactId>
+            <version>${clover.version}</version>
+            <configuration>
+              <license>
+                <![CDATA[
+                  OQMqSgqoojKAgEXeriuMRBgNRPvVctMXkMfdKmCXPPnxmt
+                  mi2Kmhc<0mscGaN8wuCEdCpS2KZ9u0FyK6JhixyJXw9lI9
+                  QQQntxRPRQPMRopQPqNxtqpNPmOQnQpmMPXXsVsWvUpvwu
+                  tsUWMWSUmVUxxsxuuMnmomUUnooqsumqmmmmmUUnooqsum
+                  qmmmmmUU3XjmrpW3orpXabWcloW3eofpqUUn
+                ]]>
+              </license>
+            </configuration>
+        </plugin>
+        
+        <plugin>
+          <groupId>com.goldin.plugins</groupId>
+          <artifactId>maven-copy-plugin</artifactId>
+          <version>0.2-SNAPSHOT</version>
+        </plugin>
+        
+        <plugin>
+          <groupId>com.goldin.plugins</groupId>
+          <artifactId>maven-find-plugin</artifactId>
+          <version>0.1</version>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>2.1.1</version>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>jboss-maven-plugin</artifactId>
+          <!-- 
+            todo: use 1.5 when it's out.  To get around http://jira.codehaus.org/browse/MJBOSS-49, i've modified run.sh to run jboss in the background
+            so that console output doesn't get buffered and eventually block the jboss process.
+           -->
+          <version>1.4.1</version>
+          <configuration>
+            <jbossHome>${jboss.installation.dir}</jbossHome>
+            <fileNames>
+              <fileName>${webapp.assembly.directory.absolute}</fileName>
+            </fileNames>
+            
+            <options></options>
+          </configuration>
+        </plugin>
+      </plugins>
+      
+    </pluginManagement>
+    
+    <plugins>
+      <plugin>
+        <groupId>com.goldin.plugins</groupId>
+        <artifactId>maven-find-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>find-root-dir</id>
+            <goals>
+              <goal>find</goal>
+            </goals>
+            <phase>validate</phase>
+          </execution>
+          <execution>
+            <id>find-jboss-dir-for-clean</id>
+            <goals>
+              <goal>find</goal>
+            </goals>
+            <phase>pre-clean</phase>
+          </execution>
+        </executions>
+        
+        <configuration>
+          <propertyName>root.directory.marker.path</propertyName>
+          <file>root.directory.marker</file>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <dependencies>
+   
+    <!-- *************** Test Dependencies *************** -->
+    <!-- 
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>5.10</version>
+      <classifier>jdk15</classifier>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+     -->
+    
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit-dep</artifactId>
+      <version>4.5</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.hamcrest</groupId>
+          <artifactId>hamcrest-core</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-all</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.8.0</version>
+      <scope>test</scope>
+    </dependency>
+   
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.4</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.2.142</version>
+      <scope>test</scope>
+    </dependency>
+   
+    <!-- *************** Provided Dependencies *************** -->
+    
+    <dependency>
+      <groupId>javax.faces</groupId>
+      <artifactId>jsf-api</artifactId>
+      <version>${javax.faces.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.faces</groupId>
+      <artifactId>jsf-impl</artifactId>
+      <version>${javax.faces.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.el</groupId>
+      <artifactId>el-api</artifactId>
+      <!-- honestly, this may be wrong.  Jboss hosts a 'javax.el:el-api:1.2' version, but no one else does, apparently...
+      Could be a revised implementation of the api that does more caching, etc.  -->
+      <version>1.2</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>1.4</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>javax.xml.ws</groupId>
+      <artifactId>jaxws-api</artifactId>
+      <version>2.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.xml.soap</groupId>
+      <artifactId>saaj-api</artifactId>
+      <version>1.3</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.transaction</groupId>
+      <artifactId>jta</artifactId>
+      <version>1.0.1B</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.persistence</groupId>
+      <artifactId>persistence-api</artifactId>
+      <version>1.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+
+  </dependencies>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  
+    <java.source.version>1.6</java.source.version>
+    <jboss.seam.version>2.1.2</jboss.seam.version>
+    <drools.version>4.0.4</drools.version>
+    <jboss.richfaces.version>3.3.1.GA</jboss.richfaces.version>
+    <javax.faces.version>1.2_12</javax.faces.version>
+    <clover.version>2.6.0</clover.version>
+    <!-- 
+    <jboss.deploy.directory.relative>jboss-deploy</jboss.deploy.directory.relative>
+     -->
+     
+    <!-- see maven-find-plugin configuration above -->
+    <root.directory>${root.directory.marker.path}/..</root.directory>
+    
+    <!-- I'd like a more elegant way to get the project.build.dir of the mpdstats -jbossconfig project, but this'll work:  -->
+    <jbossconfig.build.dir>${root.directory}/mpdstats-jbossconfig/target/</jbossconfig.build.dir>
+    
+    <jboss.version>4.2.3.GA</jboss.version>
+    <jboss.installation.dir>${jbossconfig.build.dir}/jboss-${jboss.version}</jboss.installation.dir>
+    <jboss.active.server.dir>${jboss.installation.dir}/server/default</jboss.active.server.dir>
+    
+    
+    <!--     <webapp.assembly.dir>${jboss.active.server.dir}/deploy/${project.build.finalName}.war</webapp.assembly.dir>
+     -->
+    
+    <webapp.build.final.name>mpdstats</webapp.build.final.name>
+    <webapp.assembly.directory.absolute>${root.directory}/target/deploy/${webapp.build.final.name}.war</webapp.assembly.directory.absolute>
+    <environment>dev</environment>
+    
+    <!-- This is to address a maven 3 / bamboo (< 2.6) problem: http://jira.atlassian.com/browse/BAM-4887
+      We work around this by manually printing the token Bamboo is looking for in a successful build.  The
+      build should be configured to run the standard maven goals and then the help:evaluate goal; e.g.
+      mvn help:evaluate -Dexpression='atlassian.bamboo.builder.successMarker'
+        -->
+    <atlassian.bamboo.builder.successMarker>BUILD SUCCESSFUL</atlassian.bamboo.builder.successMarker>
+  </properties>
+  
+</project>

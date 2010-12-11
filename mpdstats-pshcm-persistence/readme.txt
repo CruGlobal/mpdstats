@@ -1,0 +1,1 @@
+This project will contain jpa classes that correspond to tables in the PS HCM database.  It is currently blank.

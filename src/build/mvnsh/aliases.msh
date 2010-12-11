@@ -1,0 +1,29 @@
+# This file is for defining aliases to make project development easier
+# It assumes you're executing it from the project root directory; ie, that you run
+#   source/src/build/mvnsh/aliases.msh
+# To do this easily, set up a mvnsh.rc file in your home .m2 directory (eg /Users/mattdrees/.m2/mvnsh.rc) that aliases this
+# command; see http://arkham.ccci.org/svn/java/trunk/non-java/maven-config/mvnsh.rc for an example
+
+
+# this allows us to avoid running the find:find goal on every mvn execution; this accomplishes the same
+# purpose (populating ${root.directory.marker.path) as
+# the find:find goal, but the property will be persistent, so it only needs to be executed once.
+set -m property root.directory.marker.path ${shell.user.dir}/root.directory.marker
+
+
+set -m property jboss.is.running unknown
+alias start-jboss "mvn jboss:start; set -m property jboss.is.running true"
+alias start-jboss-and-deploy "mvn jboss:start-and-wait jboss:deploy; set -m property jboss.is.running true"
+alias stop-jboss "mvn jboss:stop; set -m property jboss.is.running false"
+alias restart-jboss mvn jboss:stop jboss:start-and-wait jboss:deploy
+
+
+#these assume you're currently in the etimesheet-webapp project
+alias refresh mvn war:exploded -o
+#these additionally assume that jboss is running
+alias deploy mvn war:exploded jboss:deploy
+alias redeploy mvn war:exploded jboss:redeploy
+alias undeploy mvn jboss:undeploy
+alias full-refresh mvn jboss:undeploy clean:clean package jboss:deploy
+
+ 

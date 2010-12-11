@@ -1,0 +1,178 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>mpdstats</artifactId>
+    <groupId>org.ccci</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.ccci</groupId>
+  <artifactId>mpdstats-jbossconfig</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>[${project.parent.artifactId} :: Jboss Application Server Configuration]</name>
+  <packaging>pom</packaging>
+  
+  <build>
+    <plugins>
+    <!-- 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>1.0</version>
+        <executions>
+          <execution>
+            <id>enforce-versions</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>[2.2.1,3.0)</version>
+                </requireMavenVersion>
+                <requireJavaVersion>
+                  <version>1.6</version>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+     -->
+    
+    
+    
+      <plugin>
+        <groupId>com.goldin.plugins</groupId>
+        <artifactId>maven-copy-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>install-jboss</id>
+            <phase>install</phase>
+            <goals>
+                <goal>copy</goal>
+            </goals>
+            <configuration>
+              <resources>
+                
+                <!-- unzips standard jboss distribution to ./target/jboss-4.2.3.GA -->
+                <resource>
+                  <targetPath>${project.build.directory}</targetPath>
+                  <dependencies>
+                    <dependency>    
+                      <groupId>jboss</groupId>
+                      <artifactId>jboss-as-dist-jdk6</artifactId>
+                      <version>${jboss.version}</version>
+                      <type>zip</type>
+                    </dependency>
+                  </dependencies>
+                  <unpack>true</unpack>
+                </resource>
+                
+                <!-- set up h2 jdbc driver -->
+                <resource>
+                  <targetPath>${jboss.active.server.dir}/lib</targetPath>
+                  <dependencies>
+                    
+                    <dependency>
+                      <groupId>com.h2database</groupId>
+                      <artifactId>h2</artifactId>
+                      <version>1.2.142</version>
+                    </dependency>
+                    
+                  </dependencies>
+                </resource>
+                
+                <!-- set up oracle jdbc driver -->
+                <resource>
+                  <targetPath>${jboss.active.server.dir}/lib</targetPath>
+                  <dependencies>
+                    
+                    <dependency>
+                      <groupId>com.oracle</groupId>
+                      <artifactId>ojdbc6_g</artifactId>
+                      <version>11.2.0.1.0</version>
+                    </dependency>
+                    
+                  </dependencies>
+                </resource>
+                
+                <!-- set up db config -->
+                <resource>
+                  <targetPath>${jboss.active.server.dir}/deploy</targetPath>
+                  <file>${project.basedir}/src/main/resources/${environment}-mpdstats-ds.xml</file>
+                  <destFileName>mpdstats-ds.xml</destFileName>
+                </resource>
+                
+                <!-- set up ccci jboss services libs -->
+                <resource>
+                  <targetPath>${jboss.active.server.dir}/lib</targetPath>
+                  <dependencies>
+                    
+                    <dependency>
+                      <groupId>org.ccci</groupId>
+                      <artifactId>jboss-addons</artifactId>
+                      <version>1.0</version>
+                    </dependency>
+                    
+                  </dependencies>
+                </resource>
+                
+                <!-- set up ccci jboss services config -->
+                <resource>
+                  <targetPath>${jboss.active.server.dir}/deploy</targetPath>
+                  <file>${project.basedir}/src/main/resources/jre-memory-leak-prevention-service.xml</file>
+                </resource>
+                
+                <!-- set up logging -->
+                <resource>
+                  <targetPath>${jboss.active.server.dir}/conf</targetPath>
+                  <file>${project.basedir}/src/main/resources/jboss-log4j.xml</file>
+                </resource>
+                
+                <!-- set up our customized startup scripts -->
+                <resource>
+                  <targetPath>${jboss.installation.dir}/bin</targetPath>
+                  <directory>${project.basedir}/src/main/resources</directory>
+                    <includes>
+                      <!-- these mostly customize the permgen space given to the jvm, but may contain other tweaks -->
+                      <include>run.bat</include>
+                      <include>run.conf</include>
+                      <include>run.sh</include>
+                    </includes>
+                </resource>
+                
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <!-- make jboss *.sh files executable (linux/mac) -->
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <id>install-jboss</id>
+            <phase>install</phase>
+            <configuration>
+              <target>
+                <chmod dir="${jboss.installation.dir}/bin" 
+                  perm="+x"
+                  includes="**/*.sh">
+                </chmod>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+      
+    </plugins>
+  </build>
+  
+</project>

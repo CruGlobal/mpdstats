@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+
+<!--
+Ant script for deploying to jboss on a potentially remote machine
+
+Built by modifying script provided at https://jira.jboss.org/jira/browse/JBIDE-1291?focusedCommentId=12397970#action_12397970
+by Juergen Zimmermann
+
+See http://docs.huihoo.com/javadoc/jboss/4.0.5/varia/org/jboss/ant/package-summary.html
+
+These targets require jboss to be running.  The script could be modified to be lenient if jboss isn't running.
+
+-->
+
+<project name="Deploy an archive to a running jboss instance" default="redeploy">
+	
+	<!-- ================================================================= -->
+	<!-- P r o p e r t i e s -->
+	<!-- ================================================================= -->
+
+	<property file="jboss-deployments.build.properties"/>
+
+	<!-- these are passed in as parameters from individual build scripts -->
+	<!-- property name="jboss.jmx.url" value="jnp://hart-a012.net.ccci.org:1099"/>
+	<property name="jboss.jmx.username" value=""/>
+	<property name="jboss.jmx.password" value=""/-->
+		
+	<property name="archive.name" value="eTimesheet-ear.ear"/>
+	<property name="archive.location" value="deploy"/>
+
+	<property name="shared.deployed.archived.path" value="${shared.deploy.dir}/${archive.name}"/>
+	<property name="archive.url" value="file:/${deploy.dir}/${archive.name}"/>
+
+	<property name="build.lib.dir" value="jboss-deployments-lib"/>
+		
+	<!-- ================================================================= -->
+	<!-- P a t h -->
+	<!-- ================================================================= -->
+	<path id="jmx.classpath">
+		<fileset dir="${build.lib.dir}">
+			<include name="jbossjmx-ant.jar"/>
+			<include name="jboss-j2ee.jar"/>
+			<include name="jbossall-client.jar"/>
+		</fileset>
+	</path>
+	
+	<!-- ================================================================= -->
+	<!-- T a r g e t s -->
+	<!-- ================================================================= -->
+	
+	<target name="property-check">
+		<fail unless="shared.deploy.dir" message="Please specify the shared.deploy.dir property"/>
+		<fail unless="deploy.dir" message="Please specify the deploy.dir property"/>
+	</target>
+	
+	<target name="deploy"
+		depends="property-check,copy-archive,deploy-archive"
+		description="copy the target archive to the server's deploy dir, replacing any existing archive, and deploy">
+	</target>
+	
+	<target name="redeploy"
+		depends="property-check,copy-archive,redeploy-archive"
+		description="copy the target archive to the server's deploy dir, replacing any existing archive, and (re)deploy">
+	</target>
+	
+	<target name="undeploy"
+		depends="property-check,undeploy-archive"
+		description="copy the target archive to the server's deploy dir, replacing any existing archive, and redeploy">
+		<delete file="${shared.deployed.archived.path}"/>
+	</target>
+	
+	<target name="copy-archive" 
+		depends=""
+		description="copy archive to deploy dir">
+		<!-- 
+		  It's not strictly necessary to send it to a temp file, and then rename it.  I do it here because I think it's a good practice.
+		  If the file transfer fails for some reason, and then the app server restarts, you won't get Jboss trying to deploy half of an archive
+		 -->
+		<copy file="${archive.location}/${archive.name}" tofile="${shared.deployed.archived.path}.tmp" overwrite="true"/>
+		<move file="${shared.deployed.archived.path}.tmp" tofile="${shared.deployed.archived.path}" overwrite="true"/>
+	</target>
+	
+	<target name="backup-deployed-archive" 
+		depends=""
+		description="backs up the archive that is currently deployed">
+		<copy file="${shared.deployed.archived.path}" tofile="${shared.deployed.archived.path}.bak" overwrite="true"/>
+	</target>
+	
+	<target name="restore-backed-up-archive" 
+		depends=""
+		description="backs up the archive that is currently deployed">
+		<move file="${shared.deployed.archived.path}.bak" tofile="${shared.deployed.archived.path}" overwrite="true"/>
+	</target>
+	
+	<target name="redeploy-archive" 
+		depends=""
+		description="Redeploy an archive currently in the server's deploy dir" >
+		<jmx-archive-operation operation="redeploy"/>
+	</target>
+	
+	<target name="undeploy-archive" 
+		depends="property-check"
+		description="Undeploy an archive currently in the server's deploy dir">
+		<jmx-archive-operation operation="undeploy"/>
+	</target>
+	
+	<target name="deploy-archive" 
+		depends="property-check"
+		description="Deploy an archive currently in the server's deploy dir">
+		<jmx-archive-operation operation="deploy"/>
+	</target>
+
+	<target name="print-jboss-started">
+		<jmx-getAttribute
+			target="jboss.system:type=Server"
+			attribute="Started" 
+			property="jboss.started"/>
+		<echo message="${jboss.started}"/>
+	</target>
+	
+
+	<target name="list-deployments">
+		<jmx-invoke
+			target="jboss.system:service=MainDeployer"
+			operation="listDeployedAsString" 
+			property="deployments">
+		</jmx-invoke>
+		<echo message="${deployments}"/>
+	</target>
+	
+
+	<target name="check-deployed">
+		<jmx-invoke
+			target="jboss.system:service=MainDeployer"
+			operation="isDeployed" 
+			property="archive.deployed">
+			<invoke-parameters>
+				<parameter type="java.net.URL"
+					arg="${archive.url}"/>
+			</invoke-parameters>
+		</jmx-invoke>
+	</target>
+	
+	<target name="print-archive-deployed" depends="check-deployed">
+		<echo message="${archive.deployed}" />
+	</target>
+	
+	<target name="verify-deployed" depends="check-deployed">
+		<fail message="Archive ${archive.name} is not deployed on the server">
+			<condition>
+				<equals arg1="${archive.deployed}" arg2="false"/>
+			</condition>
+		</fail>
+	</target>
+	
+	<taskdef name="jmx" classname="org.jboss.ant.JMX">
+		<classpath refid="jmx.classpath"/>
+	</taskdef>
+	
+
+	<macrodef name="jmx-getAttribute">
+		<attribute name="target"/>
+		<attribute name="attribute"/>
+		<attribute name="property"/>
+		<sequential>
+			<jmx adapterName="jmx/invoker/RMIAdaptor"
+				username="${jboss.jmx.username}"
+				password="${jboss.jmx.password}"
+				serverurl="${jboss.jmx.url}">
+				<getattribute target="@{target}" 
+					attribute="@{attribute}" 
+					property="@{property}"/>
+			</jmx>
+		</sequential>
+	</macrodef>
+	
+
+	<macrodef name="jmx-invoke">
+		<attribute name="target"/>
+		<attribute name="operation"/>
+		<attribute name="property" default=""/>
+		<element name="invoke-parameters" optional="true"/>
+		<sequential>
+			<jmx adapterName="jmx/invoker/RMIAdaptor"
+				username="${jboss.jmx.username}"
+				password="${jboss.jmx.password}"
+				serverurl="${jboss.jmx.url}">
+				<propertyEditor type="java.net.URL"
+					editor="org.jboss.util.propertyeditor.URLEditor"/>
+				<invoke target="@{target}"
+					operation="@{operation}"
+					property="@{property}">
+					<invoke-parameters/>
+				</invoke>
+			</jmx>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="jmx-archive-operation">
+		<attribute name="operation"/>
+		<sequential>
+			<jmx-invoke 
+				operation="@{operation}" 
+				target="jboss.system:service=MainDeployer">
+				<invoke-parameters>
+					<parameter type="java.net.URL"
+						arg="${archive.url}"/>
+				</invoke-parameters>
+			</jmx-invoke>
+		</sequential>
+	</macrodef>
+	
+	
+</project> 
