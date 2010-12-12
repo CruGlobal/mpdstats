@@ -1,0 +1,508 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:ccci="http://ccci.org/jsf/core"
+    xmlns:c="http://java.sun.com/jstl/core"
+	template="layout/template.xhtml">
+
+
+	<ui:define name="body">
+
+      <c:set var="moneyFormat" value="#,##0"/>
+
+		<h:messages styleClass="message" />
+
+		<h:form id="form2">
+
+	    <div>
+
+		  <span>
+            <s:decorate id="provisionDecoration"
+              template="layout/display.xhtml">
+              <br />
+              <ui:define name="label">
+                <h2>God's provision</h2>
+              </ui:define>
+            </s:decorate>
+		  </span>
+          <a4j:region>
+			<span>
+              <s:decorate id="monthlySupportProgressDecoration"
+                template="layout/display.xhtml">
+                <br />
+                <ui:define name="label">
+                	<hr />
+                	<h3>Monthly Support Progress</h3>
+                </ui:define>
+              </s:decorate>
+			</span>
+			<span>	
+              <s:decorate id="monthlySupportGoalDecoration"
+                template="layout/edit.xhtml">
+                <ui:define name="label">Monthly support (goal)</ui:define>
+                <h:inputText id="supportGoal"
+                	value="#{provision.report.supportGoal}">
+                    <f:convertNumber pattern="#{moneyFormat}" />
+                    <a4j:support id="supportGoalAutoSubmit"
+                      reRender="monthlySupportProgressSection"
+                      event="onchange"/>
+                </h:inputText>
+              </s:decorate>
+			</span>
+			<span>
+			  <s:decorate id="monthlySupportWeekADecoration"
+				template="layout/edit.xhtml">
+				<ui:define name="label">Monthly support gained this week (actual)</ui:define>
+				<h:inputText id="newMonthlyA"
+				  value="#{provision.report.newMonthlyActual}">
+                  <f:convertNumber pattern="#{moneyFormat}"/>
+                  <a4j:support id="newMonthlyActualAutoSubmit"
+                    reRender="monthlySupportProgressSection"
+                    event="onchange"/>
+                </h:inputText>
+			  </s:decorate>
+			</span>
+            <span>
+              <s:decorate id="monthlySupportLostWeekDecoration"
+                  template="layout/edit.xhtml">
+                  <ui:define name="label">Monthly support lost this week</ui:define>
+                  <h:inputText id="lostMonthly"
+                    value="#{provision.report.lostMonthly}">
+                    <f:convertNumber pattern="#{moneyFormat}"/>
+                    <a4j:support id="lostMonthlyAutoSubmit"
+                      reRender="monthlySupportProgressSection"
+                      event="onchange"/>
+                  </h:inputText>
+                </s:decorate>
+            </span>
+            
+            <s:div id="monthlySupportProgressSection">
+              <span>
+  				<s:decorate id="monthlySupportWeekGDecoration"
+  						template="layout/display.xhtml">
+  						<ui:define name="label">Monthly support this week (target)</ui:define>
+  						<h:outputText id="newMonthlyG"
+  							value="#{provision.mpdGoals.newMonthlyGoal}">
+                            <f:convertNumber pattern="$###,###"/>
+                          </h:outputText>
+  					</s:decorate>
+              </span>
+              <span>
+  				<s:decorate id="monthlySupportToDateADecoration"
+  						template="layout/display.xhtml">
+  						<ui:define name="label">Monthly support to date (actual)</ui:define>
+  						<h:outputText id="supportRaised"
+  							value="#{provision.supportRaisedToDate}">
+                            <f:convertNumber pattern="$###,###"/>
+                          </h:outputText>
+  					</s:decorate>
+              </span>
+              <span>
+                  <s:decorate id="monthlySupportRaisedFractionOfGoalDecoration"
+                    template="layout/display.xhtml">
+                    <ui:define name="label">Monthly support to date (% goal)</ui:define>
+                    <h:outputText id="monthlySupportRaisedFractionOfGoal"
+                      value="#{provision.monthlySupportRaisedFractionOfGoal}">
+                      <f:convertNumber pattern="###%"/>
+                    </h:outputText>
+                  </s:decorate>
+              </span>
+			  <span>
+				  <s:decorate id="supportGoalToDateDecoration"
+					template="layout/display.xhtml">
+					<ui:define name="label">Monthly support to date (target)</ui:define>
+					<h:outputText id="supportGoalToDate"
+					  value="#{provision.supportGoalToDate}">
+                      <f:convertNumber pattern="$###,###"/>
+                    </h:outputText>
+				  </s:decorate>
+			  </span>
+			  <span>
+				<s:decorate id="monthlySupportNeededDecoration"
+				  template="layout/display.xhtml">
+				  <ui:define name="label">Monthly support needed</ui:define>
+				  <h:outputText id="monthlySupportNeeded"
+				    value="#{provision.monthlySupportNeeded}">
+                    <f:convertNumber pattern="$###,###"/>
+                  </h:outputText>
+				</s:decorate>
+			  </span>
+            </s:div>
+			<span>
+              <s:decorate id="newMonthlyPartnersADecoration"
+                template="layout/edit.xhtml">
+                <ui:define name="label">New monthly partners (actual)</ui:define>
+                <h:inputText id="newPartnersA"
+                  value="#{provision.report.newPartnersActual}"/>
+              </s:decorate>
+			</span>
+			<span>
+            <s:decorate id="lostMonthlyPartnersDecoration"
+              template="layout/edit.xhtml">
+              <ui:define name="label">Monthly partners lost this week</ui:define>
+              <h:inputText id="lostPartners"
+                value="#{provision.report.lostPartners}" />
+            </s:decorate>
+			</span>
+			<span>
+				<s:decorate id="newMonthlyPartnersGDecoration"
+						template="layout/display.xhtml">
+						<ui:define name="label">New monthly partners (goal)</ui:define>
+						<h:outputText id="newPartnersG"
+							value="#{provision.mpdGoals.newPartnersGoal}"/>
+					</s:decorate>
+			</span>
+            
+            </a4j:region>
+				<!-- special needs progress section -->
+        
+            <a4j:region>
+  			  <span>
+  				<s:decorate
+  						id="specialNeedsProgressDecoration"
+  						template="layout/display.xhtml">
+  						<br />
+  						<ui:define name="label">
+  							<h3>Special needs Progress</h3>
+  							<hr />
+  						</ui:define>
+  					</s:decorate>
+  			   </span>
+                <span>
+                <s:decorate id="specialNeedsGoalDecoration"
+                    template="layout/edit.xhtml">
+                    <ui:define name="label">Special needs (goal)</ui:define>
+                    <h:inputText id="newSpecialG"
+                      value="#{provision.report.specialGoal}">
+                      <f:convertNumber pattern="#{moneyFormat}"/>
+                      <a4j:support id="specialGoalAutoSubmit"
+                        reRender="specialSupportProgressSection"
+                        event="onchange"/>
+                    </h:inputText>
+                  </s:decorate>
+                </span>
+  			   <span>
+                <s:decorate id="specialNeedsThisWeekDecoration"
+                  template="layout/edit.xhtml">
+                  <ui:define name="label">Special needs this week</ui:define>
+                  <h:inputText id="supportRaised"
+                    value="#{provision.report.newSpecialActual}">
+                    <f:convertNumber pattern="#{moneyFormat}"/>
+                    <a4j:support id="newSpecialActualAutoSubmit"
+                      reRender="specialSupportProgressSection"
+                      event="onchange"/>
+                  </h:inputText>
+                </s:decorate>
+              </span>
+        
+              <s:div id="specialSupportProgressSection">
+    			<span>
+    				<s:decorate id="specialNeedsToDateDecoration"
+    						template="layout/display.xhtml">
+    						<ui:define name="label">Special needs to date</ui:define>
+    						<h:outputText id="supportRaised"
+    							value="#{provision.specialRaisedToDate}">
+                              <f:convertNumber pattern="$###,###"/>
+                            </h:outputText>
+    					</s:decorate>
+    			</span>
+    			<span>
+    				<s:decorate id="needsToDateFractionOfGoalDecoration"
+    				  template="layout/display.xhtml">
+    				  <ui:define name="label">% Goal</ui:define>
+    				  <h:outputText id="needsToDateFractionOfGoal"
+    				    value="#{provision.specialNeedsToDateFractionOfGoal}">
+                        <f:convertNumber pattern="###%"/>
+                      </h:outputText>
+  					</s:decorate>
+    			</span>
+    			<span>
+    				<s:decorate id="specialNeedsNeededDecoration"
+    						template="layout/display.xhtml">
+    						<ui:define name="label">Special needs needed</ui:define>
+    						<h:outputText id="needsToDateGoal"
+    							value="#{provision.specialNeedsNeeded}">
+                              <f:convertNumber pattern="$###,###"/>
+                            </h:outputText>
+    					</s:decorate>
+    				
+    			</span>
+              </s:div>
+            </a4j:region>
+      
+				<!-- contacts/referrals section -->
+			<span>
+				<s:decorate
+						id="contactsReferralsDecoration" template="layout/display.xhtml">
+						<br />
+						<ui:define name="label">
+							<h3>Contacts referrals</h3>
+							<hr />
+						</ui:define>
+					</s:decorate>
+			</span>
+			<span>
+				<s:decorate id="contactsOnHandTodayDecoration"
+						template="layout/edit.xhtml">
+						<ui:define name="label">Contacts on hand today</ui:define>
+						<h:inputText id="contactsOnHand"
+							value="#{provision.report.contactsOnHand}" />
+					</s:decorate>
+			</span>
+			<span>
+				<s:decorate id="referralsGainedThisWeekADecoration"
+						template="layout/edit.xhtml">
+						<ui:define name="label">Referrals gained this week (actual)</ui:define>
+						<h:inputText id="referralsGained"
+							value="#{provision.report.referralsGained}"/>
+					</s:decorate>
+			</span>
+			<span>
+				<s:decorate id="referralsGainedThisWeekGDecoration"
+						template="layout/display.xhtml">
+						<ui:define name="label">Referrals gained this week (goal)</ui:define>
+						<h:outputText id="referralsGoal"
+							value="#{provision.mpdGoals.referralsGainedGoal}" />
+					</s:decorate>
+			</span>
+			<span>
+				<s:decorate id="referralsMoreThanOneMonthOldDecoration"
+						template="layout/edit.xhtml">
+						<ui:define name="label">Referrals more than one month old</ui:define>
+						<h:inputText id="referralsOld"
+							value="#{provision.report.referralsOld}"/>
+					</s:decorate>
+
+				<!-- contacts/referrals section -->
+				
+			</span>
+			<span>
+				<s:decorate
+						id="outstandingMonthlyCommitmentsDecoration"
+						template="layout/display.xhtml">
+						<br />
+						<ui:define name="label">
+							<h3>Outstanding Monthly Commitments</h3>
+							<hr />
+						</ui:define>
+					</s:decorate>
+			</span>
+			<span>
+				<s:decorate id="monthlyPledgesDecoration"
+				  template="layout/display.xhtml">
+                  <a4j:region>
+					<h:dataTable id="monthlyCommitmentsTable" 
+                        value="#{provision.monthlyCommitmentsList}"
+					    var="monthlyCommitmentsListItem">
+	                    <ccci:setRowData value="#{provision.selectedMonthlyCommitment}"/>
+
+						<h:column>
+                            <f:facet name="header">
+							<h:outputText id="accountNameHeader" 
+                              value="Ministry Partner's Name" />
+                            </f:facet>
+							<h:inputText id="accountName"
+								required="#{provision.isMonthlyCommitmentAccountNameFieldRequired(monthlyCommitmentsListItem)}"
+								value="#{monthlyCommitmentsListItem.accountName}" 
+            					maxlength="#{monthlyCommitmentsListItem.annotationsFor['accountName']['Length'].max}" >
+            					<s:validate/>
+            				</h:inputText>
+						</h:column>
+
+						<h:column>
+                            <f:facet name="header">
+							<h:outputText id="giftAmountHeader" 
+                              value="Monthly Commitment" />
+                            </f:facet>
+							<h:inputText id="giftAmount"
+								value="#{monthlyCommitmentsListItem.giftAmount}">
+           						<s:validate/>
+                              <f:convertNumber pattern="#{moneyFormat}"/>
+                            </h:inputText>
+						</h:column>
+            
+						<h:column>
+							<a4j:commandButton value="remove"
+                                action="#{provision.removeMonthlyCommitment}"
+                                immediate="true"
+                                reRender="monthlyPledgesDecoration"
+                                rendered="#{provision.isMonthlyCommitmentRemoveButtonRendered(monthlyCommitmentsListItem)}"/>
+						</h:column>
+						
+                        <h:column>
+                          <h:message for="accountName" styleClass="errors"/>
+                        </h:column>
+					</h:dataTable>
+                    <p>
+                    <h:outputText value="For Annual, Quarterly, etc. gifts, please convert to a monthly amount"/>
+			        </p>
+                    <a4j:commandButton id="addMonthlyCommitmentInputButton" 
+                      value="Add another item"
+					  action="#{provision.addMonthlyCommitmentInput}"
+                      reRender="monthlyPledgesDecoration"/>
+                          
+                  </a4j:region>
+			    </s:decorate>
+				<!-- special needs section -->
+				
+			</span>
+			<span>
+				<s:decorate
+						id="outstandingSpecialNeedsDecoration"
+						template="layout/display.xhtml">
+						<br />
+						<ui:define name="label">
+							<h3>Outstanding Special Needs</h3>
+							<hr />
+						</ui:define>
+					</s:decorate>
+			</span>
+			<span>
+				<s:decorate id="specialPledgesDecoration"
+						template="layout/display.xhtml">
+                  <a4j:region>
+					<h:dataTable id="specialCommitmentsTable"
+                          value="#{provision.specialCommitmentsList}"
+						var="specialCommitmentsListItem">
+                      <ccci:setRowData value="#{provision.selectedSpecialCommitment}"/>
+						<h:column>
+                            <f:facet name="header">
+							<h:outputText id="accountNameHeader" 
+                              value="Ministry Partner's Name" />
+                            </f:facet>
+							<h:inputText id="accountName"
+								required="#{provision.isSpecialCommitmentAccountNameFieldRequired(specialCommitmentsListItem)}"
+								value="#{specialCommitmentsListItem.accountName}"
+            					maxlength="#{specialCommitmentsListItem.annotationsFor['accountName']['Length'].max}" >
+            					<s:validate/>
+         					</h:inputText>
+						</h:column>
+						<h:column>
+                            <f:facet name="header">
+							<h:outputText id="giftAmountHeader" value="Gift Amount" />
+                            </f:facet>
+							<h:inputText id="giftAmount"
+								value="#{specialCommitmentsListItem.giftAmount}">
+            					<s:validate/>
+                              <f:convertNumber pattern="#{moneyFormat}"/>
+                            </h:inputText>
+						</h:column>
+						
+                        <h:column>
+                          <a4j:commandButton id="removeSpecialGiftButton" 
+                            value="remove"
+                            action="#{provision.removeSpecialCommitment}"
+                            immediate="true"
+                            reRender="specialPledgesDecoration"
+                            rendered="#{provision.isSpecialCommitmentRemoveButtonRendered(specialCommitmentsListItem)}"/>
+                        </h:column>
+                        
+                        <h:column>
+                          <h:message for="accountName" styleClass="errors"/>
+                        </h:column>
+            
+					</h:dataTable>
+					<a4j:commandButton id="addSpecialCommitmentInputButton"
+                        value="Add another item"
+					  action="#{provision.addSpecialCommitmentInput}"
+                        reRender="specialPledgesDecoration"/>
+                  </a4j:region>
+			    </s:decorate>
+				<!-- special needs section -->
+				
+			</span>
+			<span>
+				<s:decorate
+						id="improvementDecoration" template="layout/display.xhtml">
+						<br />
+						<ui:define name="label">
+							<h3>Communication</h3>
+							<hr />
+						</ui:define>
+					</s:decorate>
+			</span>
+			<span>
+					<s:decorate id="enoughMoneyDecoration"
+						template="layout/edit.xhtml">
+						<!--  note: this label is copy/pasted in ReportProcess#validate() -->
+						<ui:define name="label">Do you have enough money coming in to handle your bills?</ui:define>
+
+						<br />
+                        <h:panelGrid columns="3">
+                            <h:outputText value="Inadequate"/>
+  					        <h:selectOneRadio id="enoughMoney" align="left"
+  							  value="#{provision.report.billsOk}">
+    						  <f:selectItem id="item5" itemLabel="" itemValue="1" />
+    						  <f:selectItem id="item4" itemLabel="" itemValue="2" />
+    						  <f:selectItem id="item3" itemLabel="" itemValue="3" />
+    						  <f:selectItem id="item2" itemLabel="" itemValue="4" />
+    						  <f:selectItem id="item1" itemLabel="" itemValue="5" />
+    						</h:selectOneRadio>
+                            <h:outputText value="Adequate"/>
+                        </h:panelGrid>
+					</s:decorate>
+			</span>
+			<span>
+				<s:decorate id="iimprovementDecoration"
+						template="layout/edit.xhtml">
+					
+						<ui:define name="label">What one thing can you do next week that would most improve the effectiveness of your MPD?</ui:define>
+						<h:inputTextarea id="improvement"
+                            name="improvement" 
+							value="#{provision.report.improvement.improvement}" 
+                            style="width : 300px;"
+							rows="3" 
+                            styleClass="happy" >
+						</h:inputTextarea>
+
+					</s:decorate>
+			</span>
+			<span>
+				<s:decorate id="prayerDecoration"
+						template="layout/edit.xhtml">
+						<ui:define name="label">Prayer and Praise</ui:define>
+
+						<h:inputTextarea id="prayer" 
+                            name="prayer"
+							value="#{provision.report.prayerRequest.comments}" 
+                            style=" width : 300px;"
+							rows="5" 
+                            styleClass="happy" >
+						</h:inputTextarea>
+
+					</s:decorate>
+			</span>
+			<span id="saveButton">
+			  <s:decorate id="buttonLabelDecoration">
+    			<h:outputLabel
+    				value="If you are completely finished for this period and ready to submit then click the 'Submit Now' button." />
+    			<h:outputLabel
+    				value="If you would like to save the current data but return for further edits then click the 'Save For Later Edit' button." />
+			  </s:decorate>
+					
+			  <s:decorate id="buttonDecoration">
+                <br /><br />
+                <h:commandButton id="SaveForLaterEdit" 
+                  style="margin:10px;width:150px;"
+                  value="Save For Later Edit" 
+                  action="#{provision.save}"/> 
+                <h:commandButton id="SubmitNow" type="submit" value="Submit Now"
+                  style="margin:10px;width:150px;"
+                  action="#{provision.submit}"/>
+						
+			  </s:decorate>
+			</span>
+		</div>
+	<div style="clear:both" />
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

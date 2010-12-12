@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Class-Path: MpdStats-ejb.jar 
+ antlr-runtime.jar 
+ drools-compiler.jar 
+ drools-core.jar 
+ jboss-el.jar 
+ jboss-seam.jar 
+ jbpm-jpdl.jar 
+ mvel14.jar 
+ casclient.jar 
+ util.jar 
+ joda-time-1.5.1.jar 
+ jodaExt-0.1.jar 
+ google-collect-snapshot-20080321.jar 
+ richfaces-api-3.2.0.GA.jar
+

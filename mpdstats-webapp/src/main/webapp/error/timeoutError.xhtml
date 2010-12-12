@@ -1,0 +1,28 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/layout/template.xhtml">
+
+  <ui:param name="errorPage" value="true"/>
+  
+  <ui:define name="pageTitle">Timeout Error</ui:define>
+  
+  <ui:define name="body">
+  
+    <p>
+      There was a problem completing your request, which timed out.
+    </p>
+    
+    <p>
+      We apologize for this inconvenience.  You may wish to try your request again. To report the problem or
+      request help, send an e-mail to #{' '}
+      <h:outputLink value="mailto:#{ccciMessages.help_email}">#{ccciMessages.help_email}</h:outputLink>
+      with a description of what you were trying to do when you received the
+      error message. 
+    </p>
+  </ui:define> 
+</ui:composition>

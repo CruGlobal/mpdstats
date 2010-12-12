@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components 
+  xmlns="http://jboss.com/products/seam/components"
+  xmlns:core="http://jboss.com/products/seam/core"
+  xmlns:persistence="http://jboss.com/products/seam/persistence"
+  xmlns:drools="http://jboss.com/products/seam/drools"
+  xmlns:bpm="http://jboss.com/products/seam/bpm"
+  xmlns:security="http://jboss.com/products/seam/security"
+  xmlns:mail="http://jboss.com/products/seam/mail"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.0.xsd 
+    http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.0.xsd 
+    http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.0.xsd
+    http://jboss.com/products/seam/bpm http://jboss.com/products/seam/bpm-2.0.xsd
+    http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.0.xsd
+    http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.0.xsd
+    http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.0.xsd">
+
+   <core:init debug="false" 
+     jndi-pattern="@jndiPattern@" 
+     transaction-management-enabled="false"/>
+
+   <core:manager concurrent-request-timeout="500" 
+     conversation-timeout="120000" 
+     conversation-id-parameter="cid"/>
+
+   <persistence:managed-persistence-context name="psEntityManager"
+     auto-create="true"
+     persistence-unit-jndi-name="java:/MpdStatsEntityManagerFactory"/>                          
+
+   <security:identity authenticate-method="#{casAuthenticator.authenticate}"/>
+
+   <event type="org.jboss.seam.security.notLoggedIn">
+       <action execute="#{redirect.captureCurrentView}"/>
+   </event>
+   <!-- a corresponding #{redirect.returnToCapturedView} occurs in pages.xml after the login page action -->
+
+   <mail:mail-session host="smtp1.ccci.org"/>
+
+   <!-- For exception reporting by email.  See org.ccci.debug.ExceptionReporter for more info -->
+   <component name="exceptionReporter">
+     <property name="enabled">true</property>
+     <property name="sender">mpdStats@ccci.org</property>
+     <property name="recipients">
+       <value>matt.drees@ccci.org</value>
+     </property>
+   </component>
+
+   <!--  see org.ccci.faces.convert.LocalDateConverter -->
+   <factory name="localDateConverterPattern" value="MM/dd/yyyy"/>
+
+</components>

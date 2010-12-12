@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#statsHome.xhtml" PATH="/statsHome.xhtml"
+  SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#statsHome.xhtml:0" NAME="item"
+   PATH="/statsHome.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="saved:#{statsHome.saveAndContinue}:#provision.xhtml"
+    NAME="output" PATH="/provision.xhtml"
+    TARGET="rules:#provision.xhtml"
+    TITLE="#{statsHome.saveAndContinue}:saved" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="saved:#{statsHome.save}:#saved.xhtml"
+    NAME="output1" PATH="/saved.xhtml" TARGET="rules:#saved.xhtml"
+    TITLE="#{statsHome.save}:saved" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#provision.xhtml" PATH="/provision.xhtml"
+  SHAPE="32,129,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#provision.xhtml:0" NAME="item"
+   PATH="/provision.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="saved:#{provision.save}:#saved.xhtml"
+    NAME="output" PATH="/saved.xhtml" TARGET="rules:#saved.xhtml"
+    TITLE="#{provision.save}:saved" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="submitted:#{provision.submit}:#submitted.xhtml" NAME="output1"
+    PATH="/submitted.xhtml" TARGET="rules:#submitted.xhtml"
+    TITLE="#{provision.submit}:submitted" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#submitted.xhtml" PATH="/submitted.xhtml"
+  SHAPE="256,145,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#submitted.xhtml:0" NAME="item"
+   PATH="/submitted.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="returnHome::#statsHome.xhtml" NAME="output"
+    PATH="/statsHome.xhtml" TARGET="rules:#statsHome.xhtml"
+    TITLE="returnHome" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#saved.xhtml" PATH="/saved.xhtml"
+  SHAPE="256,33,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#saved.xhtml:0" NAME="item"
+   PATH="/saved.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="returnHome::#statsHome.xhtml" NAME="output"
+    PATH="/statsHome.xhtml" TARGET="rules:#statsHome.xhtml"
+    TITLE="returnHome" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+</PROCESS>

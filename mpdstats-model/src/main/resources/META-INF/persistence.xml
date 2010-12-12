@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Persistence deployment descriptor for dev profile -->
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" 
+             version="1.0">
+             
+   <persistence-unit name="MpdStats">
+      <provider>org.hibernate.ejb.HibernatePersistence</provider>
+      <jta-data-source>java:/MpdStatsDatasource</jta-data-source>
+      
+      <class>org.ccci.dao.psdb.EmployeeEntity</class>
+      
+      <properties>
+         <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
+         <!-- <property name="hibernate.hbm2ddl.auto" value="update"/> -->
+         <!-- 
+         <property name="hibernate.show_sql" value="true"/>
+         <property name="hibernate.format_sql" value="true"/>
+          -->
+         <property name="hibernate.jdbc.batch_size" value="0"/>
+         <property name="jboss.entity.manager.factory.jndi.name" value="java:/MpdStatsEntityManagerFactory"/>
+      </properties>
+   </persistence-unit>
+    
+</persistence>

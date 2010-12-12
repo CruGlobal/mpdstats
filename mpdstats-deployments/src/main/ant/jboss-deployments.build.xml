@@ -12,6 +12,10 @@ These targets require jboss to be running.  The script could be modified to be l
 
 -->
 
+<!--
+NOTE: this is duplicated in the eTimesheet project; changes made here should be reflected there as well!
+-->
+
 <project name="Deploy an archive to a running jboss instance" default="redeploy">
 	
 	<!-- ================================================================= -->
@@ -20,17 +24,16 @@ These targets require jboss to be running.  The script could be modified to be l
 
 	<property file="jboss-deployments.build.properties"/>
 
-	<!-- these are passed in as parameters from individual build scripts -->
-	<!-- property name="jboss.jmx.url" value="jnp://hart-a012.net.ccci.org:1099"/>
+	<!-- these can be overridden in jboss-deployments.build.properties, but these are useful defaults -->
+	<property name="jboss.jmx.url" value="jnp://localhost:1099"/>
 	<property name="jboss.jmx.username" value=""/>
-	<property name="jboss.jmx.password" value=""/-->
+	<property name="jboss.jmx.password" value=""/>
 		
-	<property name="archive.name" value="eTimesheet-ear.ear"/>
+	<property name="archive.name" value="MpdStats-ear.ear"/>
 	<property name="archive.location" value="deploy"/>
-
 	<property name="shared.deployed.archived.path" value="${shared.deploy.dir}/${archive.name}"/>
 	<property name="archive.url" value="file:/${deploy.dir}/${archive.name}"/>
-
+	
 	<property name="build.lib.dir" value="jboss-deployments-lib"/>
 		
 	<!-- ================================================================= -->
@@ -43,6 +46,7 @@ These targets require jboss to be running.  The script could be modified to be l
 			<include name="jbossall-client.jar"/>
 		</fileset>
 	</path>
+	
 	
 	<!-- ================================================================= -->
 	<!-- T a r g e t s -->
@@ -65,12 +69,12 @@ These targets require jboss to be running.  The script could be modified to be l
 	
 	<target name="undeploy"
 		depends="property-check,undeploy-archive"
-		description="copy the target archive to the server's deploy dir, replacing any existing archive, and redeploy">
+		description="Undeploy the target archive currently in the server's deploy dir">
 		<delete file="${shared.deployed.archived.path}"/>
 	</target>
 	
 	<target name="copy-archive" 
-		depends=""
+		depends="property-check"
 		description="copy archive to deploy dir">
 		<!-- 
 		  It's not strictly necessary to send it to a temp file, and then rename it.  I do it here because I think it's a good practice.
@@ -80,20 +84,8 @@ These targets require jboss to be running.  The script could be modified to be l
 		<move file="${shared.deployed.archived.path}.tmp" tofile="${shared.deployed.archived.path}" overwrite="true"/>
 	</target>
 	
-	<target name="backup-deployed-archive" 
-		depends=""
-		description="backs up the archive that is currently deployed">
-		<copy file="${shared.deployed.archived.path}" tofile="${shared.deployed.archived.path}.bak" overwrite="true"/>
-	</target>
-	
-	<target name="restore-backed-up-archive" 
-		depends=""
-		description="backs up the archive that is currently deployed">
-		<move file="${shared.deployed.archived.path}.bak" tofile="${shared.deployed.archived.path}" overwrite="true"/>
-	</target>
-	
 	<target name="redeploy-archive" 
-		depends=""
+		depends="property-check"
 		description="Redeploy an archive currently in the server's deploy dir" >
 		<jmx-archive-operation operation="redeploy"/>
 	</target>
@@ -210,5 +202,52 @@ These targets require jboss to be running.  The script could be modified to be l
 		</sequential>
 	</macrodef>
 	
+
+    <path id="jkstatus.classpath">
+      <pathelement location="${build.lib.dir}/commons-logging-api.jar"/>
+      <pathelement location="${build.lib.dir}/catalina-ant.jar"/>
+      <pathelement location="${build.lib.dir}/tomcat-jkstatus-ant.jar"/>
+      <pathelement location="${build.lib.dir}/tomcat-util.jar"/>
+    </path>
+
+    <typedef resource="org/apache/jk/status/antlib.xml"       
+           uri="urn:org-apache-jk-status" classpathref="jkstatus.classpath"/> 
+	
+	<target name="dump-jkstatus"
+        xmlns:jk="urn:org-apache-jk-status">
+		<!-- no username or password -->
+ 	    <jk:status url="${jkstatus.url}"
+ 	    	username="foo"
+ 	    	password="bar"
+	        resultproperty="worker"
+	      	echo="off"
+	        failOnError="off"/>
+	    <echoproperties prefix="worker" />
+	</target>
+	
+
+	<target name="start-service">
+		<service action="start"
+			service="${service.name}"
+			server="${service.server}"/>
+	</target>
+	
+	<target name="stop-service">
+		<service action="start"
+			service="${service.name}"
+			server="${service.server}"/>
+	</target>
+
+	<macrodef name="service">
+		<attribute name="server"/>
+   		<attribute name="service"/>
+    	<attribute name="action"/>
+    	<sequential>
+        	<exec executable="cmd.exe">
+            	<arg line="/c sc @{server} @{action} '@{service}'"/>
+        	</exec>
+     	</sequential>
+	</macrodef>
+
 	
 </project> 

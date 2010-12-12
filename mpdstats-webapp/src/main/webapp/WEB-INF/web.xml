@@ -1,0 +1,143 @@
+<?xml version="1.0" ?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+         version="2.5">
+
+    <distributable/>
+
+    <context-param>
+        <param-name>org.ajax4jsf.VIEW_HANDLERS</param-name>
+        <param-value>com.sun.facelets.FaceletViewHandler</param-value>
+    </context-param>
+    
+    <!-- Ajax4jsf -->
+    
+    <context-param>
+        <param-name>org.richfaces.SKIN</param-name>
+        <param-value>blueSky</param-value>
+    </context-param>
+ 
+   <!-- Seam -->
+    
+   <listener>
+      <listener-class>org.jboss.seam.servlet.SeamListener</listener-class>
+   </listener>
+    
+    <filter>
+        <filter-name>Seam Filter</filter-name>
+        <filter-class>org.jboss.seam.servlet.SeamFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>Seam Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+        
+   <servlet>
+      <servlet-name>Seam Resource Servlet</servlet-name>
+      <servlet-class>org.jboss.seam.servlet.SeamResourceServlet</servlet-class>
+   </servlet>
+    
+   <servlet-mapping>
+      <servlet-name>Seam Resource Servlet</servlet-name>
+      <url-pattern>/seam/resource/*</url-pattern>
+   </servlet-mapping>
+   
+   <!-- Facelets development mode (disable in production) -->
+   
+   <context-param>
+      <param-name>facelets.DEVELOPMENT</param-name>
+      <param-value>false</param-value>
+   </context-param>
+    
+   <!-- JSF -->
+   
+   <context-param>
+      <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+      <param-value>.xhtml</param-value>
+   </context-param>
+
+   <servlet>
+      <servlet-name>Faces Servlet</servlet-name>
+      <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+      <load-on-startup>1</load-on-startup>
+   </servlet>
+    
+  <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>*.xhtml</url-pattern>
+    <!-- note: keep in synch with below, and with "refresh" url in /index.html -->
+  </servlet-mapping>
+  <context-param>
+    <param-name>applicationURLProvider.facesServletExtensionMapping</param-name>
+    <param-value>xhtml</param-value>
+  </context-param>
+
+   
+    <filter>
+    <filter-name>CASFilter</filter-name>
+    <filter-class>edu.yale.its.tp.cas.client.filter.CASFilter</filter-class>
+    <init-param>
+      <param-name>edu.yale.its.tp.cas.client.filter.loginUrl</param-name>
+      <param-value>https://signin.ccci.org/cas/login</param-value>
+    </init-param>
+    <init-param>
+      <param-name>edu.yale.its.tp.cas.client.filter.logoutUrl</param-name>
+      <param-value>https://signin.ccci.org/cas/logout</param-value>
+    </init-param>
+    <init-param>
+      <param-name>edu.yale.its.tp.cas.client.filter.validateUrl</param-name>
+      <param-value>https://signin.ccci.org/cas/serviceValidate</param-value>
+    </init-param>
+    <init-param>
+      <param-name>edu.yale.its.tp.cas.client.filter.wrapRequest</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>edu.yale.its.tp.cas.client.filter.logoutCallbackUrl</param-name>
+      <param-value>http://hart-itg-kopp-l:8080/eTimesheet/logout/casLogoutCallback</param-value>
+    </init-param>
+  </filter> 
+  <filter-mapping>
+    <filter-name>CASFilter</filter-name>
+    <url-pattern>/login/*</url-pattern>
+  </filter-mapping>
+
+  <listener>
+    <listener-class>org.ccci.el.JbossELShutdownListener</listener-class>
+  </listener>
+  
+   
+  <context-param>
+    <param-name>org.ccci.maintenance.window.db.path</param-name>
+    <param-value>../server/production/data/mpdstats-maintenance</param-value>
+    <!-- working dir is in jboss_home/bin, so this results in database file at jboss_home/server/production/data/mpdstats-maintenance.h2.db -->
+  </context-param>
+  
+  <servlet>
+    <servlet-name>MaintenanceControlServlet</servlet-name>
+    <servlet-class>org.ccci.maintenance.MaintenanceControlServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>MaintenanceControlServlet</servlet-name>
+    <url-pattern>/maintenanceControl/*</url-pattern>
+  </servlet-mapping>
+
+  <filter>
+    <filter-name>MaintenanceFilter</filter-name>
+    <filter-class>org.ccci.maintenance.MaintenanceServletFilter</filter-class>
+    <init-param>
+      <param-name>bypassUrlPatterns</param-name>
+      <param-value>
+        /maintenanceControl/.*
+      </param-value>
+    </init-param>    
+  </filter>
+  <filter-mapping>
+    <filter-name>MaintenanceFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+</web-app>

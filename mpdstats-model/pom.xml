@@ -14,6 +14,21 @@
     
   <dependencies>
   
+      <dependency>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+         <version>5.10</version>
+        <classifier>jdk15</classifier>
+        <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>junit</groupId> 
+            <artifactId>junit</artifactId>
+          </exclusion>
+        </exclusions>
+    </dependency>
+
+  
   
     <dependency>
       <groupId>org.ccci</groupId>

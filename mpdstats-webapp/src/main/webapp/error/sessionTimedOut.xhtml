@@ -1,0 +1,32 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/layout/template.xhtml">
+
+<ui:define name="pageTitle">Session Timed Out</ui:define>
+
+<ui:param name="hideMessages" value="true" />
+
+<ui:define name="body">
+
+  <p>
+    Your session has timed out after
+    #{' '} 
+    <h:outputText value="#{session.maxInactiveInterval / 60}">
+      <f:convertNumber pattern="###0" />
+    </h:outputText>
+    minutes of inactivity.
+  </p>
+  <p>
+    Please click 
+    #{' '}
+    <h:outputLink value="#{facesContext.externalContext.requestContextPath}/">here</h:outputLink>
+    to continue.
+  </p>
+
+</ui:define> 
+</ui:composition>

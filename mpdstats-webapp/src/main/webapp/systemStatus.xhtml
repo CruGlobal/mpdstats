@@ -1,0 +1,22 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:s="http://jboss.com/products/seam/taglib"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:ccci="http://ccci.org/jsf/core">
+	<ui:composition template="/layout/template.xhtml">
+  	<ui:define name="pageTitle">MpdStats System Status</ui:define>
+	<ui:define name="pageHeader">System Status Page</ui:define>
+		<ui:define name="body">
+			<h:form id="systemStatus">
+				<p>Logged In As: <h:outputText value="#{identity.username}" /> </p>
+				<p>Database Connection Summary: <h:outputText value="#{mpdSystemStatus.summaryDbCheck()}"/></p>
+				<p>Peoplesoft Database Connection: <h:outputText value="#{mpdSystemStatus.psDbCheck()}"/></p>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</html>

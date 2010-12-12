@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages xmlns="http://jboss.com/products/seam/pages"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd"
+
+       login-view-id="/login/login.xhtml">
+       
+    <page view-id="/login/login.xhtml">
+      <action if="#{not identity.isLoggedIn(false)}" execute="#{identity.login}"/>
+      
+      <action if="#{not loggedInEmployeeIdProvider.employeeIdAssociatedWithCasAccount}" 
+        execute="showNoEmployeeIdAssociatedWithCasAccount"/>
+      <action if="#{not employeeIdValidator.isValid(loggedInEmployeeId)}" 
+        execute="showNotValidEmployee"/>
+      <action execute="#{redirect.returnToCapturedView}"/>
+      <!-- if no stored view, then action below will navigate to a useful default page -->
+      <action execute="/statsHome.xhtml"/>
+
+      <navigation from-action="showNoEmployeeIdAssociatedWithCasAccount">
+        <redirect view-id="/error/knownError.xhtml">
+          <message>
+            Your Relay Single Sign On login account is not associated with an employee
+            id. If you are not on staff with Campus Crusade for Christ, you will
+            not be able to use this site. Otherwise, it may take up to 24 hours to
+            associate a brand new SSO account
+            with a CCC employee id. If you are on staff and have had this SSO account
+            for more than 24 hours, please contact #{ccciMessages.help_name} and
+            give them this message, along with your Single Sign On User E-mail. 
+          </message>
+        </redirect>
+      </navigation>
+      <navigation from-action="showNotValidEmployee">
+        <redirect view-id="/error/knownError.xhtml">
+          <message>
+            Your Relay Single Sign On login account is associated with an
+            employee id that is not valid. Please contact
+            #{ccciMessages.help_name}. 
+          </message>
+        </redirect>
+      </navigation>
+      
+    </page>
+    
+    <page view-id="systemStatus.xhtml" login-required="true"/>
+    
+    <page view-id="/*" login-required="true"/>
+         
+    <!-- pages to test exceptions -->
+    <page view-id="/runtimeException.xhtml" action="#{errorTesting.throwRuntimeException}"/>
+    
+    <page view-id="/logError.xhtml" action="#{errorTesting.logError}"/>
+  
+    <!-- Exception Handling --> 
+    
+    <exception class="org.jboss.seam.security.NotLoggedInException">
+        <redirect view-id="/login/login.xhtml">
+            <message></message>
+        </redirect>
+    </exception>
+    
+    <exception class="javax.faces.application.ViewExpiredException">
+        <redirect view-id="/error/sessionTimedOut.xhtml"/>
+    </exception>
+    
+    <exception class="org.jboss.seam.security.AuthorizationException">
+        <redirect view-id="/error/userError.xhtml">
+            <message>You don't have permission to do this</message>
+        </redirect>
+    </exception>
+    
+    <exception class="java.sql.SQLException">
+        <redirect view-id="/error/databaseError.xhtml"/>
+    </exception>
+    
+    <exception class="javax.resource.ResourceException">
+        <redirect view-id="/error/timeoutError.xhtml"/>
+    </exception>
+    
+    <exception>
+        <redirect view-id="/error/systemError.xhtml">
+            <message></message>
+        </redirect>
+    </exception>
+    
+</pages>

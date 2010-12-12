@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="layout/template.xhtml">
+
+<!-- xmlns:rich="http://richfaces.ajax4jsf.org/rich" -->
+	<ui:define name="body">
+
+		<h:messages styleClass="message" />
+
+		<h:form id="statsHomeForm">
+
+<span id="saveButton">					
+			
+				<s:decorate id="saveButton">
+				<h:commandButton id="ReturnToMainPage"
+				value="Return To Main Page"  
+				action="returnHome"/> 
+				<br /><br />	
+									
+				
+					</s:decorate>
+</span>			
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,648 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:s="http://jboss.com/products/seam/taglib"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:a4j="http://richfaces.org/a4j"
+  xmlns:rich="http://richfaces.org/rich"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:ccci="http://ccci.org/jsf/core"
+  template="layout/template.xhtml">
+
+  <ui:define name="body">
+  
+    <h:messages styleClass="message" />
+  
+    <div>
+      <h:form id="statsHomeForm">
+
+        <h2>MPD Weekly Update</h2>
+	
+        <span>
+          CAMPUS CRUSADE FOR CHRIST<br />
+          MPD Weekly Update<br />
+          Sending Christ-centered, Fully-funded Laborers<br />
+          Into the Harvest to Help Build Spiritual<br />
+          Movements Everywhere
+        </span>
+
+        <s:decorate id="nameDecoration"
+          template="layout/display.xhtml">
+          <ui:define name="label">Name</ui:define>
+          <h:outputText id="name" 
+            value="#{statsHome.reportingName}" />
+        </s:decorate>
+
+        <s:decorate id="currentPhoneDecoration"
+          template="layout/edit.xhtml">
+          <ui:define name="label">Current phone</ui:define>
+          <h:inputText id="phone" 
+            value="#{statsHome.report.telephone}"
+            maxlength="#{statsHome.report.annotationsFor['telephone']['Length'].max}" 
+            required="true"/>
+        </s:decorate>
+
+        <s:decorate id="accountNoDecoration"
+          template="layout/display.xhtml">
+          <ui:define name="label">Account No.</ui:define>
+          <h:outputText id="emplid" 
+            value="#{statsHome.reportingEmployeeId}" />
+        </s:decorate>
+
+        <s:decorate id="departmentDecoration"
+          template="layout/display.xhtml">
+          <ui:define name="label">Assignment/Dept.</ui:define>
+          <h:outputText id="deptname" 
+            value="#{statsHome.reportingDepartmentName}" />
+        </s:decorate>
+
+        <s:decorate id="nstSessionEditDecoration"
+          template="layout/edit.xhtml">
+          <ui:define name="label">NST Session</ui:define>
+          
+          <h:selectOneMenu value="#{statsHome.nstSessionSeason}" required="true">
+            <f:selectItems id="sessionSeason" value="#{statsHome.nstSessionSeasons}"
+            required="true"/>
+          </h:selectOneMenu>
+            
+          <h:selectOneMenu value="#{statsHome.nstSessionYear}" required="true">
+            <f:selectItems id="sessionYear" value="#{statsHome.nstSessionYears}"
+            required="true"/>
+          </h:selectOneMenu>
+        </s:decorate>       
+        
+        <s:decorate id="mpdWeekNumberDecoration"
+          template="layout/display.xhtml">
+          <ui:define name="label">Week number in MPD</ui:define>
+          <h:outputText id="mpdweeks" 
+            value="#{statsHome.report.mpdWeekNumber}" />
+        </s:decorate>
+        
+        <s:decorate id="reportEndDateDisplayDecoration"
+          template="layout/display.xhtml" 
+          rendered="#{not statsHome.new}">
+          <ui:define name="label">Saturday's Date</ui:define>
+
+          <h:outputText id="textReportEndDate" 
+            value="#{statsHome.report.reportPeriod.endDate}"/>
+        </s:decorate>
+        <s:decorate id="reportEndDateEditDecoration"
+          template="layout/edit.xhtml"
+          rendered="#{statsHome.new}">
+          <ui:define name="label">Saturday's Date</ui:define>
+          <rich:calendar id="calReportEndDate"  
+            value="#{statsHome.reportEndDate}"
+            datePattern="#{localDateConverterPattern}"
+            enableManualInput="true"
+            cellWidth="24px" 
+            cellHeight="22px" 
+            style="width:200px"
+            required="true"
+            validator="#{statsHome.validateReportEndDate}">
+            <ccci:convertDateTime pattern="#{localDateConverterPattern}"/>
+          </rich:calendar>
+        </s:decorate>
+        
+        <s:decorate id="currentBalanceDecoration"
+          template="layout/display.xhtml">
+          <ui:define name="label">Current balance</ui:define>
+          <h:outputText id="currentbalance" value="#{statsHome.currentBalance}" >
+            <f:convertNumber pattern="$###,###.##"/>
+          </h:outputText>
+        </s:decorate>
+        <s:decorate id="lastPrayerLetterDateDecoration"
+          template="layout/edit.xhtml">
+          <ui:define name="label">Last prayer letter date</ui:define>
+          <rich:calendar id="calLastPrayerLetterDate" 
+            value="#{statsHome.report.lastPrayerLetterDate}"
+            datePattern="#{localDateConverterPattern}"
+            enableManualInput="true"
+            cellWidth="24px" 
+            cellHeight="22px" 
+            style="width:200px">
+            <ccci:convertDateTime pattern="#{localDateConverterPattern}"/>
+          </rich:calendar>
+        </s:decorate>
+
+        <s:decorate id="hoursOtherJobDecoration"
+          template="layout/edit.xhtml">
+          <ui:define name="label">Hours worked at other job</ui:define>
+          <h:inputText id="hoursotherjob" 
+            value="#{statsHome.report.hoursOtherJob}"
+            required="true"
+            validator="#{statsHome.validateHoursOtherJob}">
+          </h:inputText>
+        </s:decorate>
+
+        <s:decorate id="updateGoalsDecoration"
+          template="layout/display.xhtml">
+          <ui:define name="label">Enter hours worked at other job then click to update goals</ui:define>
+          <h:commandButton id="updateGoalsButton" 
+            value="#{statsHome.new ? 'Set date &amp; goals' : 'Update goals'}"
+            action="#{statsHome.updateGoals}"/>
+        </s:decorate>
+      
+        <a4j:region>
+      
+          <s:decorate id="mpdWeeklyActivitiesDecoration"
+            template="layout/display.xhtml">
+            <br />
+            <ui:define name="label">
+              <h2>MPD Weekly Activities</h2>
+              <hr />
+            </ui:define>
+          </s:decorate>
+  
+          <s:decorate id="appointmentsSetUpHeaderDecoration"
+            template="layout/display.xhtml">
+            <ui:define name="label">
+              <h3>Appointments Set Up</h3>
+            </ui:define>
+          </s:decorate>
+  
+          <s:decorate id="phoneHeaderDecoration"
+            template="layout/display.xhtml">
+            <ui:define name="label">
+              <h4>Phone</h4>
+              <hr />
+            </ui:define>
+          </s:decorate>
+  
+          <s:decorate id="dialsActualDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Dials (actual)</ui:define>
+            <h:inputText id="dialsActual" 
+              value="#{statsHome.report.dialsActual}"  
+              required="true"/>
+          </s:decorate>	
+  
+          <s:decorate id="dialsGoalDecoration"
+            template="layout/display.xhtml">
+            <ui:define name="label">Dials (goal)</ui:define>
+            <h:outputText id="dialsGoal" 
+              value="#{statsHome.mpdGoals.dialsGoal}" />
+          </s:decorate>	
+  
+          <s:decorate id="talkedToActualDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Talked to (actual)</ui:define>
+            <h:inputText id="talkedToActual" 
+              value="#{statsHome.report.talkedToActual}"   
+              required="true"/>
+          </s:decorate>	
+  
+          <s:decorate id="talkedToGoalDecoration"
+            template="layout/display.xhtml">
+            <ui:define name="label">Talked to (goal)</ui:define>
+            <h:outputText id="talkedToGoal" 
+              value="#{statsHome.mpdGoals.talkedToGoal}" />
+          </s:decorate>	
+  
+          <s:decorate id="appointmentsSetActualDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Number of appointments set up (actual)</ui:define>
+            <h:inputText id="appointmentsSetActual" 
+              value="#{statsHome.report.appointmentsSetActual}"   
+              required="true"/>
+          </s:decorate>	
+  
+          <s:decorate id="appointmentsSetGoalDecoration"
+            template="layout/display.xhtml">
+            <ui:define name="label">Number of appointments set up(goal)</ui:define>
+            <h:outputText id="appointmentsSetGoal"
+  		      value="#{statsHome.mpdGoals.appointmentsSetGoal}" />
+          </s:decorate>	
+  
+          <s:decorate id="hoursOnPhoneDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Hours on phone</ui:define>
+            <h:inputText id="hoursOnPhone"
+              value="#{statsHome.report.hoursOnPhone}"   
+              required="true">
+              <a4j:support id="hoursOnPhoneAutoSubmit"
+                reRender="totalHoursActualDecoration"
+                event="onchange"/>
+            </h:inputText>
+          </s:decorate>	
+  
+
+          <s:decorate id="eContactsHeaderDecoration"
+            template="layout/display.xhtml">
+            <ui:define name="label">
+              <h4>Electronic Contacts</h4>
+              <hr />
+            </ui:define>
+          </s:decorate>
+  
+          <s:decorate id="dialsEContactsActualDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Attempted contacts using Email, Facebook, etc. (actual)</ui:define>
+            <h:inputText id="dialsEContactsActual" 
+              value="#{statsHome.report.dialsEContactsActual}"  
+              required="true"/>
+          </s:decorate> 
+  
+
+          <s:decorate id="talkedToEContactsActualDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Number of people who responded (actual)</ui:define>
+            <h:inputText id="talkedToEContactsActual" 
+              value="#{statsHome.report.talkedToEContactsActual}"   
+              required="true"/>
+          </s:decorate> 
+    
+          <s:decorate id="appointmentsSetEContactsActualDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Number of appointments set up (actual)</ui:define>
+            <h:inputText id="appointmentsSetEContactsActual" 
+              value="#{statsHome.report.appointmentsSetEContactsActual}"   
+              required="true"/>
+          </s:decorate> 
+  
+          <s:decorate id="hoursOnEContactsDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Hours on electronic contacts</ui:define>
+            <h:inputText id="hoursOnEContacts"
+              value="#{statsHome.report.hoursOnEContacts}"   
+              required="true">
+              <a4j:support id="hoursOnEContactsAutoSubmit"
+                reRender="totalHoursActualDecoration"
+                event="onchange"/>
+            </h:inputText>
+          </s:decorate> 
+    
+  
+  
+          <s:decorate
+              id="appointmentsHeaderDecoration"
+              template="layout/display.xhtml">
+              <ui:define name="label">
+                <h3>Appointments (presentation and ask)</h3>
+                <hr />
+              </ui:define>
+          </s:decorate>
+  
+          <s:decorate id="individualAppointmentActualDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Individual face to face (actual)</ui:define>
+            <h:inputText id="indivApptA" 
+              value="#{statsHome.report.individualAppointmentActual}"   
+              required="true"/>
+          </s:decorate> 
+  
+          <s:decorate id="individualAppointmentsGoalDecoration"
+            template="layout/display.xhtml">
+            <ui:define name="label">Individual face to face (goal)</ui:define>
+            <h:outputText id="indivApptG" 
+              value="#{statsHome.mpdGoals.individualAppointmentsGoal}" />
+          </s:decorate> 
+  
+          <s:decorate id="groupMeetingsDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Number of group meetings</ui:define>
+            <h:inputText id="groupMeetings" 
+              value="#{statsHome.report.groupMeetings}"   
+              required="true"/>
+          </s:decorate> 
+  
+          <s:decorate id="groupMeetAttendDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Number of couples/singles at meetings</ui:define>
+            <h:inputText id="groupMeetAttend" 
+              value="#{statsHome.report.groupMeetAttend}"   
+              required="true"/>
+          </s:decorate> 
+  
+          <s:decorate id="hoursOnAppointmentsDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Hours on appointments</ui:define>
+            <h:inputText id="hoursOnAppointments" 
+              value="#{statsHome.report.hoursOnAppointments}"   
+              required="true">
+              <a4j:support id="hoursOnAppointmentsAutoSubmit"
+                reRender="totalHoursActualDecoration"
+                event="onchange"/>
+            </h:inputText>
+          </s:decorate> 
+  
+  <!-- correspondence section -->
+  
+          <s:decorate id="correspondenceHeaderDecoration"
+              template="layout/display.xhtml">
+              <ui:define name="label">
+                <h3>Correspondence</h3>
+                <hr />
+              </ui:define>
+          </s:decorate>
+  
+          <s:decorate id="preCallLettersDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Pre-call letters</ui:define>
+            <h:inputText id="preCallLetters" 
+              value="#{statsHome.report.preCallLetters}"   
+              required="true"/>
+          </s:decorate> 
+  
+          <s:decorate id="supportLettersDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Support letters</ui:define>
+            <h:inputText id="supportLetters" 
+              value="#{statsHome.report.supportLetters}"   
+              required="true"/>
+          </s:decorate>
+  
+          <s:decorate id="tyRemindLetterDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Thank-you notes, reminder letters</ui:define>
+            <h:inputText id="tyRemindLtr" 
+              value="#{statsHome.report.tyRemindLetter}"   
+              required="true"/>
+          </s:decorate>
+  
+          <s:decorate id="hoursCorrespondDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Hours on correspondence</ui:define>
+            <h:inputText id="hoursCorrespond" 
+              value="#{statsHome.report.hoursCorrespond}"   
+              required="true">
+              <a4j:support id="hoursCorrespondAutoSubmit"
+                reRender="totalHoursActualDecoration"
+                event="onchange"/>
+            </h:inputText>
+          </s:decorate>
+  
+  	
+  
+          <!-- MPD Activities section -->
+  
+          <s:decorate id="otherMpdActivitiesHeaderDecoration"
+              template="layout/display.xhtml">
+              <ui:define name="label">
+                <h3>Other MPD Activities(List Activities and hours)</h3>
+                <hr />
+              </ui:define>
+          </s:decorate>
+  
+          <s:decorate id="hoursDecisionsDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Call backs for decisions</ui:define>
+            <h:inputText id="hoursDecisions" 
+              value="#{statsHome.report.hoursDecisions}"   
+              required="true">
+              <a4j:support id="hoursDecisionsAutoSubmit"
+                reRender="totalHoursActualDecoration"
+                event="onchange"/>
+            </h:inputText>
+          </s:decorate>
+  
+          <s:decorate id="hoursReferralAppointmentsDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Appointments (for referrals only)</ui:define>
+            <h:inputText id="hoursApptRef"
+              value="#{statsHome.report.hoursReferralAppointments}"   
+              required="true">
+              <a4j:support id="hoursReferralAppointmentsAutoSubmit"
+                reRender="totalHoursActualDecoration"
+                event="onchange"/>
+            </h:inputText>
+          </s:decorate>
+          
+          <s:decorate id="hoursPrayerLetterDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Prayer letters</ui:define>
+            <h:inputText id="hoursPl" 
+              value="#{statsHome.report.hoursPrayerLetter}"   
+              required="true">
+              <a4j:support id="hoursPrayerLetterAutoSubmit"
+                reRender="totalHoursActualDecoration"
+                event="onchange"/>
+            </h:inputText>
+          </s:decorate>
+          
+          <s:decorate id="hoursOtherDesc1Decoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Other description</ui:define>
+            <h:inputText id="hoursOtherDesc1" 
+              value="#{statsHome.report.hoursOtherDesc1}"
+              maxlength="#{statsHome.report.annotationsFor['hoursOtherDesc1']['Length'].max}"/>
+          </s:decorate>
+          
+          <s:decorate id="hoursOther1Decoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Other hours</ui:define>
+            <h:inputText id="hoursOther1" 
+              value="#{statsHome.report.hoursOther1}"   
+              required="true">
+              <a4j:support id="hoursOther1AutoSubmit"
+                reRender="totalHoursActualDecoration"
+                event="onchange"/>
+            </h:inputText>
+          </s:decorate>
+          
+          <s:decorate id="hoursOtherDesc2Decoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Other description</ui:define>
+            <h:inputText id="hoursOtherDesc2" 
+              value="#{statsHome.report.hoursOtherDesc2}" 
+              maxlength="#{statsHome.report.annotationsFor['hoursOtherDesc2']['Length'].max}"/>
+          </s:decorate>
+          
+          <s:decorate id="hoursOther2Decoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Other hours</ui:define>
+            <h:inputText id="hoursOther2" 
+              value="#{statsHome.report.hoursOther2}"   
+              required="true">
+              <a4j:support id="hoursOther2AutoSubmit"
+                reRender="totalHoursActualDecoration"
+                event="onchange"/>
+            </h:inputText>
+          </s:decorate>
+          
+          <s:decorate id="totalHoursHeaderDecoration"
+              template="layout/display.xhtml">
+              <ui:define name="label">
+                <h3>Total Hours - Support</h3>
+              </ui:define>
+          </s:decorate>
+          
+          <s:decorate id="totalHoursActualDecoration"
+              template="layout/display.xhtml">
+              <ui:define name="label">
+                Total Hours (actual)
+              </ui:define>
+              <h:outputText id="hoursTotalActual"
+                value="#{statsHome.hoursTotalActual}" />
+              <br/>
+          </s:decorate>
+          
+          <s:decorate id="totalHoursGoalDecoration"
+              template="layout/display.xhtml">
+              <ui:define name="label">
+                Total Hours (goal)
+              </ui:define>
+              <h:outputText id="hoursTotalG" 
+                value="#{statsHome.mpdGoals.hoursTotalGoal}" />
+          </s:decorate>
+        
+        </a4j:region>
+
+        <!-- non MPD section -->
+        <s:decorate id="nonMpdActivitiesHeaderDecoration"
+            template="layout/display.xhtml">
+            <ui:define name="label">
+            <hr />
+              <h3>Non-MPD Activities</h3>
+            </ui:define>
+        </s:decorate>
+        		
+        <s:decorate id="hoursNtSurveyDecoration"
+          template="layout/edit.xhtml">
+          <ui:define name="label">Hours on NT Survey this week</ui:define>
+          <h:inputText id="hoursNtSurvey" 
+            value="#{statsHome.report.hoursNtSurvey}"   
+            required="true"/>
+        </s:decorate>
+
+        <a4j:region>
+          <s:decorate id="ntSurveySessionDecoration"
+            template="layout/edit.xhtml">
+            <ui:define name="label">Total number of sessions completed as of this week</ui:define>
+            <h:inputText id="ntSurveySess" 
+              value="#{statsHome.report.ntSurveySession}"  
+              required="true" />
+          </s:decorate>
+     
+          		
+          <s:decorate id="ntSurveySessionPercentageDecoration"
+            template="layout/display.xhtml">
+            <ui:define name="label">Progress towards finishing NT Survey</ui:define>
+            <a4j:commandButton id="recalculateProgressButton" 
+              value="recalculate progress"
+              reRender="ntSurveySessionPercentageDecoration"/>
+            <br/>
+            <h:outputText id="ntSurveySessProgress" 
+              value="#{statsHome.ntSurveySessionFraction}">
+              <f:convertNumber pattern="###%"/>
+            </h:outputText>
+              
+          </s:decorate>
+     
+        </a4j:region>
+        
+        <s:decorate id="testDateDecoration"
+          template="layout/edit.xhtml">
+          <ui:define name="label">Final exam date</ui:define>
+          <rich:calendar id="testDateCalendar" 
+            value="#{statsHome.report.testDate}"
+            datePattern="#{localDateConverterPattern}"
+            enableManualInput="true"
+            cellWidth="24px" 
+            cellHeight="22px" 
+            style="width:200px">
+            <ccci:convertDateTime pattern="#{localDateConverterPattern}"/>
+          </rich:calendar>
+        </s:decorate>
+   
+        <s:decorate id="hoursEveryStudentDotComDecoration"
+          template="layout/edit.xhtml">
+          <ui:define name="label">EveryStudent.com (number of hours)</ui:define>
+          <h:inputText id="hoursEscom" 
+            value="#{statsHome.report.hoursEveryStudentDotCom}"   
+            required="true"/>
+        </s:decorate>
+   
+        <!-- non MPD section -->
+
+        <s:decorate id="communicationHeaderDecoration"
+            template="layout/display.xhtml">
+            <ui:define name="label">
+              <hr />
+            <h3>Communication</h3>
+            </ui:define>
+        </s:decorate>
+   
+        <s:decorate id="coachCalledDecoration"
+          template="layout/edit.xhtml">
+          <ui:define name="label">Coach called?</ui:define>
+            <h:selectOneRadio id="coachCalled"
+              value="#{statsHome.report.coachCalled}">
+              <f:selectItem itemLabel="Yes" itemValue="true" />
+              <f:selectItem itemLabel="No" itemValue="false" />
+            </h:selectOneRadio>
+        </s:decorate>
+
+        <s:decorate id="wifesCoachCalledDecoration"
+          template="layout/edit.xhtml"
+          rendered="#{statsHome.wifesCoachCalledVisible}">
+          <ui:define name="label">Wife's Coach called?</ui:define>
+            <h:selectOneRadio id="wifesCoachCalled" 
+              value="#{statsHome.report.wifesCoachCalled}">
+              <f:selectItem itemLabel="Yes" itemValue="true" />
+              <f:selectItem itemLabel="No" itemValue="false" />
+            </h:selectOneRadio>
+        </s:decorate>
+
+        <s:decorate id="teamCalledDecoration"
+          template="layout/edit.xhtml">
+          <ui:define name="label">Someone on my team called?</ui:define>
+            <h:selectOneRadio id="teamCalled2" 
+              value="#{statsHome.report.teamCalled}">
+              <f:selectItem itemLabel="Yes" itemValue="true" />
+              <f:selectItem itemLabel="No" itemValue="false" />
+            </h:selectOneRadio>
+        </s:decorate>
+
+        <s:decorate id="howAreYouDecoration"
+          template="layout/edit.xhtml">
+          
+		  <!--  note: this label is copy/pasted in ReportProcess#validate() -->
+          <ui:define name="label">How are you?</ui:define>
+          <h:panelGrid columns="3">
+            <h:outputText value="Terrible"/>
+            <h:selectOneRadio id="howAreYou" 
+              value="#{statsHome.report.howAreYou}" >
+              <f:selectItem id="itemhy5" itemLabel="" itemValue="1" />
+              <f:selectItem id="itemhy4" itemLabel="" itemValue="2" />
+              <f:selectItem id="itemhy3" itemLabel="" itemValue="3" />
+              <f:selectItem id="itemhy2" itemLabel="" itemValue="4" />
+              <f:selectItem id="itemhy1" itemLabel="" itemValue="5" />
+            </h:selectOneRadio>
+            <h:outputText value="Fantastic"/>
+          </h:panelGrid>
+        </s:decorate>
+
+        <s:decorate id="commentsDecoration"
+          template="layout/edit.xhtml">
+          <ui:define name="label">Comments</ui:define>
+            <h:inputTextarea id="comments" 
+              name="comments"
+              style=" width : 200px;" 
+              rows="5"
+              value="#{statsHome.report.comment.comments}" >
+            </h:inputTextarea>
+        </s:decorate>
+
+        <s:decorate id="buttonsDecoration"
+          template="layout/display.xhtml">
+          <span id="saveButton">
+            <h:commandButton id="SaveAndExit"
+              value="Save For Later Edit" 
+              action="#{statsHome.save}" /> 
+            <br /><br />  
+            <h:commandButton id="saveAndContinue"
+              value="Save and continue to next page" 
+              action="#{statsHome.saveAndContinue}">
+            </h:commandButton>
+          </span>
+        </s:decorate>
+
+      </h:form>
+	</div>
+    <div style="clear:both" />
+  
+  </ui:define>
+  
+</ui:composition>
