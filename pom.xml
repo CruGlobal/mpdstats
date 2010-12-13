@@ -343,6 +343,27 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <version>1.0.b2</version>
+      <scope>provided</scope>
+    </dependency>
+    
+      <!-- *************** Provided on Jboss *************** -->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>3.0.0.GA</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.14</version>
+      <scope>provided</scope>
+    </dependency>
 
   </dependencies>
   

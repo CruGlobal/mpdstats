@@ -25,10 +25,6 @@
      conversation-timeout="120000" 
      conversation-id-parameter="cid"/>
 
-   <persistence:managed-persistence-context name="psEntityManager"
-     auto-create="true"
-     persistence-unit-jndi-name="java:/MpdStatsEntityManagerFactory"/>                          
-
    <security:identity authenticate-method="#{casAuthenticator.authenticate}"/>
 
    <event type="org.jboss.seam.security.notLoggedIn">

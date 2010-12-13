@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<components xmlns="http://jboss.com/products/seam/components"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:persistence="http://jboss.com/products/seam/persistence"
+  xmlns:transaction="http://jboss.com/products/seam/transaction"
+  xmlns:drools="http://jboss.com/products/seam/drools"
+  xsi:schemaLocation="
+    http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.0.xsd
+    http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.0.xsd
+    http://jboss.com/products/seam/transaction http://jboss.com/products/seam/transaction-2.0.xsd
+    http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.0.xsd">
+
+  <persistence:managed-persistence-context 
+    name="psEntityManager"
+    auto-create="true"
+    entity-manager-factory="#{peoplesoftEntityManagerFactory}"/>
+ 
+  <persistence:entity-manager-factory 
+    name="peoplesoftEntityManagerFactory"
+    persistence-unit-name="mpdstats"/>
+ 
+</components>
