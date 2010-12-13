@@ -8,7 +8,7 @@ public class MpdStatsPersistenceTest extends HibernatePersistenceTest
     @Override
     protected String getDefaultPersistenceUnitName()
     {
-        return "MpdStats";
+        return "MpdStatsUnitTest";
     }
 
 }

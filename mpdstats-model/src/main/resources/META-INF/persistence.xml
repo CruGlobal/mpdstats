@@ -8,6 +8,7 @@
    <persistence-unit name="MpdStats">
       <provider>org.hibernate.ejb.HibernatePersistence</provider>
       <jta-data-source>java:/MpdStatsDatasource</jta-data-source>
+      <mapping-file>META-INF/orm-peoplesoft.xml</mapping-file>
       
       <class>org.ccci.dao.psdb.EmployeeEntity</class>
       

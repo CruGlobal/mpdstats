@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="mpdstats-model-unit" >
+
+  <test name="mpdstats-model">
+    <packages>
+      <package name="org.ccci.*"/>
+    </packages>
+  </test>
+
+</suite>
