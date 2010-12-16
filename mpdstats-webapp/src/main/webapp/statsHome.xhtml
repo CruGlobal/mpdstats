@@ -10,9 +10,24 @@
   xmlns:ui="http://java.sun.com/jsf/facelets"
   xmlns:ccci="http://ccci.org/jsf/core"
   template="layout/template.xhtml">
+    
 
   <ui:define name="body">
-  
+	<script type="text/javascript">
+        var curDt = new Date();
+        function disablementFunction(day){
+            if (curDt==undefined){
+                curDt = day.date.getDate;
+            }
+            if (curDt.getTime() - day.date.getTime() &gt; 0) return true; else return false;  
+        }
+        function disabledClassesProv(day){
+            if (curDt.getTime() - day.date.getTime() &lt;= 0) return 'rich-calendar-boundary-dates';
+            var res = '';
+            return res;
+        }
+    </script>
+    
     <h:messages styleClass="message" />
   
     <div>
@@ -79,7 +94,7 @@
           <h:outputText id="mpdweeks" 
             value="#{statsHome.report.mpdWeekNumber}" />
         </s:decorate>
-        
+			
         <s:decorate id="reportEndDateDisplayDecoration"
           template="layout/display.xhtml" 
           rendered="#{not statsHome.new}">
@@ -119,9 +134,12 @@
             value="#{statsHome.report.lastPrayerLetterDate}"
             datePattern="#{localDateConverterPattern}"
             enableManualInput="true"
+            isDayEnabled="disablementFunction" 
+			dayStyleClass="disabledClassesProv" 
             cellWidth="24px" 
             cellHeight="22px" 
-            style="width:200px">
+            style="width:200px"
+            validator="#{statsHome.validateLastPrayerLetterDate}">
             <ccci:convertDateTime pattern="#{localDateConverterPattern}"/>
           </rich:calendar>
         </s:decorate>

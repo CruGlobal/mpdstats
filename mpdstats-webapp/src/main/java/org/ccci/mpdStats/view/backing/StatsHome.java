@@ -158,11 +158,30 @@ public class StatsHome
             "value (%s) is of type %s, not of type %s", 
             value, value.getClass(), LocalDate.class);
         LocalDate reportPeriodEnd = (LocalDate) value;
+
         if (!ReportPeriod.isAValidReportPeriodEndDate(reportPeriodEnd))
         {
             throw new ValidatorException(new FacesMessage(
                 String.format("%s is not a Saturday; please choose a date that is", reportPeriodEnd)));
         }
+    }
+    
+    public void validateLastPrayerLetterDate(FacesContext context, UIComponent toValidate,
+    										 Object value) throws ValidatorException
+    {
+        Preconditions.checkArgument(value instanceof LocalDate, 
+                "value (%s) is of type %s, not of type %s", 
+                value, value.getClass(), LocalDate.class);
+        
+        LocalDate lastPrayerLetterDate = (LocalDate) value;
+        LocalDate today = new LocalDate();
+        
+    	if (today.isBefore(lastPrayerLetterDate))
+        {
+            throw new ValidatorException(new FacesMessage(
+                String.format("%s is not a past day or today.", lastPrayerLetterDate)));
+        }
+    	
     }
     
 
