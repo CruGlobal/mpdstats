@@ -79,7 +79,7 @@ public class ReportPeriod extends ValueObject implements Serializable, Comparabl
         return new ReportPeriod(reportPeriodEnd);
     }
 
-    private static LocalDate getReportPeriodEndForDayInPeriod(LocalDate localDate)
+    public static LocalDate getReportPeriodEndForDayInPeriod(LocalDate localDate)
     {
         int daysBetween = Days.daysBetween(REFERENCE_REPORT_PERIOD_START, localDate).getDays();
         int dayInReportPeriod = Math.mod(daysBetween, 7);

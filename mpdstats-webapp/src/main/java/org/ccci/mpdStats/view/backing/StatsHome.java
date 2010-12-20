@@ -159,11 +159,20 @@ public class StatsHome
             value, value.getClass(), LocalDate.class);
         LocalDate reportPeriodEnd = (LocalDate) value;
 
+        LocalDate thisSaturday = ReportPeriod.getReportPeriodEndForDayInPeriod(new LocalDate());
+        
+        
         if (!ReportPeriod.isAValidReportPeriodEndDate(reportPeriodEnd))
         {
             throw new ValidatorException(new FacesMessage(
-                String.format("%s is not a Saturday; please choose a date that is", reportPeriodEnd)));
+               String.format("%s is not a Saturday; please choose a date that is", reportPeriodEnd)));
         }
+        if ( reportPeriodEnd.isAfter(thisSaturday) )
+        {
+            throw new ValidatorException(new FacesMessage(
+                String.format("%s is after this Saturday. Please choose this Saturday %s or a previous Saturday.", reportPeriodEnd, thisSaturday)));
+        }
+        
     }
     
     public void validateLastPrayerLetterDate(FacesContext context, UIComponent toValidate,
