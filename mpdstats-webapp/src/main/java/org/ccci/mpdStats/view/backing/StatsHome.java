@@ -158,15 +158,14 @@ public class StatsHome
             "value (%s) is of type %s, not of type %s", 
             value, value.getClass(), LocalDate.class);
         LocalDate reportPeriodEnd = (LocalDate) value;
-
-        LocalDate thisSaturday = ReportPeriod.getReportPeriodEndForDayInPeriod(new LocalDate());
-        
         
         if (!ReportPeriod.isAValidReportPeriodEndDate(reportPeriodEnd))
         {
             throw new ValidatorException(new FacesMessage(
                String.format("%s is not a Saturday; please choose a date that is", reportPeriodEnd)));
         }
+        
+        LocalDate thisSaturday = ReportPeriod.getReportPeriodEndForDayInPeriod(new LocalDate());
         if ( reportPeriodEnd.isAfter(thisSaturday) )
         {
             throw new ValidatorException(new FacesMessage(
