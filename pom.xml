@@ -205,6 +205,18 @@
     </plugins>
   </build>
   
+  <dependencyManagement>
+    <dependencies>
+      
+      <dependency>
+        <groupId>org.ccci</groupId>
+        <artifactId>util</artifactId>
+        <version>jboss-4-compatible-1-SNAPSHOT</version>
+      </dependency>
+      
+    </dependencies>
+  </dependencyManagement>
+  
   <dependencies>
    
     <!-- *************** Test Dependencies *************** -->
