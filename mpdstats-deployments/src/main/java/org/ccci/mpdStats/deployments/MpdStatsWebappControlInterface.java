@@ -28,7 +28,7 @@ public class MpdStatsWebappControlInterface implements WebappControlInterface
     public void verifyNewDeploymentActive()
     {
         String uri = "http://" + server + ":" + port +"/MpdStats/up.html";
-        new PageMatcher().pingUntilPageMatches(uri, ".*System is Up.*", "up.html", 180);
+        new PageMatcher().pingUntilPageMatches(uri, ".*System is Up.*", "up.html", 200);
     }
 
     @Override
