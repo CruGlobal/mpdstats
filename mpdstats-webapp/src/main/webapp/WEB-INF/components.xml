@@ -40,6 +40,9 @@
      <property name="sender">mpdStats@ccci.org</property>
      <property name="recipients">
        <value>matt.drees@ccci.org</value>
+       <value>linda.ye@ccci.org</value>
+       <value>robby.ronk@ccci.org</value>
+       <value>ryan.t.carlson@ccci.org</value>
      </property>
    </component>
 
