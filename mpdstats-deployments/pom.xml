@@ -9,4 +9,142 @@
   <artifactId>mpdstats-deployments</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>[${project.parent.artifactId} :: Deployment Tools]</name>
+  
+  <properties>
+    <deploymentUsername></deploymentUsername>
+    <deploymentEnvironment></deploymentEnvironment>
+    <continuousIntegrationUrl></continuousIntegrationUrl>
+  </properties>
+  
+  <dependencies>
+  
+    <dependency>
+      <groupId>org.ccci</groupId>
+      <artifactId>util</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.ccci</groupId>
+      <artifactId>deployments</artifactId>
+    </dependency>
+  
+  </dependencies>
+  
+  <build>
+    <plugins>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.3.1</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>org.ccci.deployment.Main</mainClass>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>org.ccci:deployments:*</include>
+                </includes>
+              </artifactSet>
+            </configuration>
+          </execution>
+        </executions>
+        
+         <!-- 
+         this plugin's dependency on org.apache.commons:commons-io:0.6 is problematic.  That lib
+         is not the official commons-io maven artifact, and it's pom is malformed, which causes
+         artifactory to refuse to cache it.  So, we use a newer jdependency dependenc (0.7) which
+         uses the official commons-io artifact.
+          -->
+         <dependencies>
+           <dependency>
+             <groupId>org.vafer</groupId>
+             <artifactId>jdependency</artifactId>
+             <version>0.7</version>
+           </dependency>
+           
+        </dependencies>
+              
+      </plugin>
+      
+    </plugins>
+  </build>
+  
+  <profiles>
+    <profile>
+      <id>execute-deployment</id>
+      <build>
+      
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>         
+            <version>1.6</version>
+            
+            <executions>
+              <execution>
+                <id>execute-deployment-antscript</id>
+                <phase>validate</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                  
+                   <taskdef uri="antlib:org.ccci.deployments"
+                     resource="org/ccci/deployment/antlib.xml"
+                     classpathref="maven.plugin.classpath"/>
+                     
+                   <!--
+                   We have to externalize the deployments:deploy task into its own build file,
+                   because having any xml-namespaced element in this (pom) document throws off the 
+                   maven-shade-plugin when it tries to parse & condense the pom for the shaded version.  Sad.
+                    -->
+                   <!-- 
+                   Also, for some reason the reference ant build can't read properties such as deploymentUsrname 
+                   directly, even though from my understanding of the documentation, it should (because the property
+                   is declared at the beginning of this pom in the <properties> sction).  Oh well.  We can work 
+                   around it by using the following ant <property> declarations.  
+                    -->
+                    <property environment="env"/>
+                    <property name="deployment_password" value="${env.deployerPassword}"/>
+                    <property name="deployment_environment" value="${deploymentEnvironment}"/>
+                    <property name="deployment_username" value="${deploymentUsername}"/>
+                    <property name="continuous_integration_url" value="${continuousIntegrationUrl}"/>
+                    <ant antfile="src/main/ant/deploy.xml" />
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+              
+            <dependencies>
+              <dependency>
+                <groupId>org.ccci</groupId>
+                <artifactId>mpdstats-deployments</artifactId>
+                <version>${project.version}</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  
+  </profiles>
+  
 </project>

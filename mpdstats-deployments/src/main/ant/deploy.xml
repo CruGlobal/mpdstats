@@ -1,0 +1,14 @@
+<project name="deployment" default="deploy"  xmlns:deployments="antlib:org.ccci.deployments">
+  
+ <target name = "deploy">
+  
+  <deployments:deploy
+    environment="${deployment_environment}"
+    username="${deployment_username}"
+    domain="NET"
+    password="${deployment_password}"
+    continuousIntegrationUrl="${continuous_integration_url}" />
+ </target>
+  
+  
+</project>
