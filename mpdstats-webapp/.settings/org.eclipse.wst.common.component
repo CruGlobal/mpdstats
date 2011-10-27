@@ -10,12 +10,6 @@
         <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/util/util">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/maintenance-filter-server/maintenance-filter-server">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/maintenance-filter-api/maintenance-filter-api">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="context-root" value="etimesheet-webapp"/>
         <property name="java-output-path"/>
     </wb-module>
