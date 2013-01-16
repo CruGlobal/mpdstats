@@ -90,15 +90,15 @@
     <filter-class>edu.yale.its.tp.cas.client.filter.CASFilter</filter-class>
     <init-param>
       <param-name>edu.yale.its.tp.cas.client.filter.loginUrl</param-name>
-      <param-value>https://signin.ccci.org/cas/login</param-value>
+      <param-value>https://signin.cru.org/cas/login</param-value>
     </init-param>
     <init-param>
       <param-name>edu.yale.its.tp.cas.client.filter.logoutUrl</param-name>
-      <param-value>https://signin.ccci.org/cas/logout</param-value>
+      <param-value>https://signin.cru.org/cas/logout</param-value>
     </init-param>
     <init-param>
       <param-name>edu.yale.its.tp.cas.client.filter.validateUrl</param-name>
-      <param-value>https://signin.ccci.org/cas/serviceValidate</param-value>
+      <param-value>https://signin.cru.org/cas/serviceValidate</param-value>
     </init-param>
     <init-param>
       <param-name>edu.yale.its.tp.cas.client.filter.wrapRequest</param-name>
