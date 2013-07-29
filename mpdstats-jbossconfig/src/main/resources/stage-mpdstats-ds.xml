@@ -11,20 +11,11 @@
     <connection-url>
       jdbc:oracle:thin:@
         (DESCRIPTION =
-          (ADDRESS_LIST =
-            (FAILOVER = ON)
-            (ADDRESS = (PROTOCOL = TCP)(HOST = harta8510v)(PORT = 1521))
-            (ADDRESS = (PROTOCOL = TCP)(HOST = harta8610v)(PORT = 1521))
-          )
+          (ADDRESS = (PROTOCOL = TCP)(HOST = stage1-scan.ccci.org)(PORT = 1521))
+          (LOAD_BALANCE = yes)
           (CONNECT_DATA =
             (SERVER = DEDICATED)
-            (SERVICE_NAME = hcm9sapp.ccci.org)
-            (FAILOVER_MODE =
-              (TYPE = SELECT)
-              (METHOD = BASIC)
-              (RETRIES = 20)
-              (DELAY= 1)
-            )
+            (SERVICE_NAME = hcm9stgapp.ccci.org)
           )
         )
     </connection-url>
