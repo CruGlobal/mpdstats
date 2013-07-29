@@ -6,7 +6,6 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.ccci</groupId>
   <artifactId>mpdstats-jbossconfig</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>[${project.parent.artifactId} :: Jboss Application Server Configuration]</name>
