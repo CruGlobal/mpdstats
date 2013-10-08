@@ -13,12 +13,19 @@ import com.google.common.base.Preconditions;
 
 public class ReportPeriod extends ValueObject implements Serializable, Comparable<ReportPeriod>
 {
-
     /**
      *  November 9 2008, a Sunday, was the beginning of a report period. 
      *  Report period boundaries are calculated from this.
      */
-    private static final LocalDate REFERENCE_REPORT_PERIOD_START = new LocalDate(2008, 11, 9);
+    private static final LocalDate REFERENCE_REPORT_PERIOD_START_OLD = new LocalDate(2008, 11, 9);
+    
+    /**
+     * October 7, 2013, a Monday, was the beginning of a report period.
+     * We will now accommodate Sunday report period begin dates from before, 
+     * and Monday report period begin dates going forward.
+     */
+    //TODO: Make sure this is the Monday of the week it goes live
+    private static final LocalDate REFERENCE_REPORT_PERIOD_START_NEW = new LocalDate(2013, 10, 7);
 
     @ToStringProperty
     private final LocalDate reportPeriodEnd;
@@ -30,11 +37,45 @@ public class ReportPeriod extends ValueObject implements Serializable, Comparabl
     
     public ReportPeriod previousReportPeriod()
     {
+    	/*
+    	 * In order for a smooth transition between Saturday end dates and 
+    	 * Sunday end dates, we need some "magic" for the week that the 
+    	 * transition actually occurs.
+    	 * 
+    	 * Check to see if the current report will end on the first available 
+    	 * Sunday of this new reporting structure.  If so, the previous report 
+    	 * would have an end date of the previous Saturday rather than the 
+    	 * previous Sunday, so we must subtract a day.
+    	 */
+    	
+    	//First Sunday after the new report period start date
+    	LocalDate transitionDate = REFERENCE_REPORT_PERIOD_START_NEW.plusDays(6);
+    	if(transitionDate.isEqual(reportPeriodEnd))
+    	{
+    		return newReportPeriodEndingOn(reportPeriodEnd.minusWeeks(1).minusDays(1));
+    	}
         return newReportPeriodEndingOn(reportPeriodEnd.minusWeeks(1));
     }
     
     public ReportPeriod nextReportPeriod()
     {
+    	/*
+    	 * In order for a smooth transition between Saturday end dates and 
+    	 * Sunday end dates, we need some "magic" for the week that the 
+    	 * transition actually occurs.
+    	 * 
+    	 * Check to see if the previous report ended on the Saturday before 
+    	 * the new reporting structure began.  If so, the next report will 
+    	 * end on a Sunday rather than a Saturday, so we must add a day.
+    	 */
+    	
+    	//Saturday before the new report period start date
+    	LocalDate transitionDate = REFERENCE_REPORT_PERIOD_START_NEW.minusDays(2);
+    	if(transitionDate.isEqual(reportPeriodEnd))
+    	{
+    		//For the transition, add 1 day to go from Saturday to Sunday
+    		return newReportPeriodEndingOn(reportPeriodEnd.plusWeeks(1).plusDays(1));
+    	}
         return newReportPeriodEndingOn(reportPeriodEnd.plusWeeks(1));
     }
     
@@ -81,8 +122,28 @@ public class ReportPeriod extends ValueObject implements Serializable, Comparabl
 
     public static LocalDate getReportPeriodEndForDayInPeriod(LocalDate localDate)
     {
-        int daysBetween = Days.daysBetween(REFERENCE_REPORT_PERIOD_START, localDate).getDays();
-        int dayInReportPeriod = Math.mod(daysBetween, 7);
+        int daysBetween;
+        int dayInReportPeriod;
+        
+        /*
+         * Set up a break between Sunday start dates and Monday start dates.  
+         * It is the same logic for both (making sure the date passed in is 
+         * the same day of the week), but one is based on a Monday and the 
+         * other is based on a Sunday.  This will allow all prior reports to 
+         * continue loading properly, while also supporting the proper report 
+         * start dates going forward.
+         */
+        if(localDate.isBefore(REFERENCE_REPORT_PERIOD_START_NEW))
+        {
+        	daysBetween = Days.daysBetween(REFERENCE_REPORT_PERIOD_START_OLD, localDate).getDays();
+        	dayInReportPeriod = Math.mod(daysBetween, 7);
+        }
+        else
+        {
+        	daysBetween = Days.daysBetween(REFERENCE_REPORT_PERIOD_START_NEW, localDate).getDays();
+        	dayInReportPeriod = Math.mod(daysBetween, 7);
+        }
+        
         return localDate.plusDays(6 - dayInReportPeriod);
     }
 

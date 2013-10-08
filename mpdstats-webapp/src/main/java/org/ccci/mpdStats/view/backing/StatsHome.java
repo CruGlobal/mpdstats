@@ -162,14 +162,16 @@ public class StatsHome
         if (!ReportPeriod.isAValidReportPeriodEndDate(reportPeriodEnd))
         {
             throw new ValidatorException(new FacesMessage(
-               String.format("%s is not a Saturday; please choose a date that is", reportPeriodEnd)));
+               String.format("%s is not a valid report end date; please choose a date that is", reportPeriodEnd)));
         }
         
-        LocalDate thisSaturday = ReportPeriod.getReportPeriodEndForDayInPeriod(new LocalDate());
-        if ( reportPeriodEnd.isAfter(thisSaturday) )
+        LocalDate thisReportPeriodEnd = ReportPeriod.getReportPeriodEndForDayInPeriod(new LocalDate());
+        if ( reportPeriodEnd.isAfter(thisReportPeriodEnd) )
         {
             throw new ValidatorException(new FacesMessage(
-                String.format("%s is after this Saturday. Please choose this Saturday %s or a previous Saturday.", reportPeriodEnd, thisSaturday)));
+                String.format("%s is after the end of this report period. " + 
+                		"Please choose this report period end date %s or a previous report period end date.", 
+                		reportPeriodEnd, thisReportPeriodEnd)));
         }
         
     }

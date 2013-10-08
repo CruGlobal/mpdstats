@@ -98,7 +98,7 @@
         <s:decorate id="reportEndDateDisplayDecoration"
           template="layout/display.xhtml" 
           rendered="#{not statsHome.new}">
-          <ui:define name="label">Saturday's Date</ui:define>
+          <ui:define name="label">Sunday's Date</ui:define>
 
           <h:outputText id="textReportEndDate" 
             value="#{statsHome.report.reportPeriod.endDate}"/>
@@ -106,7 +106,7 @@
         <s:decorate id="reportEndDateEditDecoration"
           template="layout/edit.xhtml"
           rendered="#{statsHome.new}">
-          <ui:define name="label">Saturday's Date</ui:define>
+          <ui:define name="label">Sunday's Date</ui:define>
           <rich:calendar id="calReportEndDate"  
             value="#{statsHome.reportEndDate}"
             datePattern="#{localDateConverterPattern}"
