@@ -37,45 +37,45 @@ public class ReportPeriod extends ValueObject implements Serializable, Comparabl
     
     public ReportPeriod previousReportPeriod()
     {
-    	/*
-    	 * In order for a smooth transition between Saturday end dates and 
-    	 * Sunday end dates, we need some "magic" for the week that the 
-    	 * transition actually occurs.
-    	 * 
-    	 * Check to see if the current report will end on the first available 
-    	 * Sunday of this new reporting structure.  If so, the previous report 
-    	 * would have an end date of the previous Saturday rather than the 
-    	 * previous Sunday, so we must subtract a day.
-    	 */
-    	
-    	//First Sunday after the new report period start date
-    	LocalDate transitionDate = REFERENCE_REPORT_PERIOD_START_NEW.plusDays(6);
-    	if(transitionDate.isEqual(reportPeriodEnd))
-    	{
-    		return newReportPeriodEndingOn(reportPeriodEnd.minusWeeks(1).minusDays(1));
-    	}
+        /*
+         * In order for a smooth transition between Saturday end dates and 
+         * Sunday end dates, we need some "magic" for the week that the 
+         * transition actually occurs.
+         * 
+         * Check to see if the current report will end on the first available 
+         * Sunday of this new reporting structure.  If so, the previous report 
+         * would have an end date of the previous Saturday rather than the 
+         * previous Sunday, so we must subtract a day.
+         */
+        
+        //First Sunday after the new report period start date
+        LocalDate transitionDate = REFERENCE_REPORT_PERIOD_START_NEW.plusDays(6);
+        if(transitionDate.isEqual(reportPeriodEnd))
+        {
+            return newReportPeriodEndingOn(reportPeriodEnd.minusWeeks(1).minusDays(1));
+        }
         return newReportPeriodEndingOn(reportPeriodEnd.minusWeeks(1));
     }
     
     public ReportPeriod nextReportPeriod()
     {
-    	/*
-    	 * In order for a smooth transition between Saturday end dates and 
-    	 * Sunday end dates, we need some "magic" for the week that the 
-    	 * transition actually occurs.
-    	 * 
-    	 * Check to see if the previous report ended on the Saturday before 
-    	 * the new reporting structure began.  If so, the next report will 
-    	 * end on a Sunday rather than a Saturday, so we must add a day.
-    	 */
-    	
-    	//Saturday before the new report period start date
-    	LocalDate transitionDate = REFERENCE_REPORT_PERIOD_START_NEW.minusDays(2);
-    	if(transitionDate.isEqual(reportPeriodEnd))
-    	{
-    		//For the transition, add 1 day to go from Saturday to Sunday
-    		return newReportPeriodEndingOn(reportPeriodEnd.plusWeeks(1).plusDays(1));
-    	}
+        /*
+         * In order for a smooth transition between Saturday end dates and 
+         * Sunday end dates, we need some "magic" for the week that the 
+         * transition actually occurs.
+         * 
+         * Check to see if the previous report ended on the Saturday before 
+         * the new reporting structure began.  If so, the next report will 
+         * end on a Sunday rather than a Saturday, so we must add a day.
+         */
+        
+        //Saturday before the new report period start date
+        LocalDate transitionDate = REFERENCE_REPORT_PERIOD_START_NEW.minusDays(2);
+        if(transitionDate.isEqual(reportPeriodEnd))
+        {
+            //For the transition, add 1 day to go from Saturday to Sunday
+            return newReportPeriodEndingOn(reportPeriodEnd.plusWeeks(1).plusDays(1));
+        }
         return newReportPeriodEndingOn(reportPeriodEnd.plusWeeks(1));
     }
     
