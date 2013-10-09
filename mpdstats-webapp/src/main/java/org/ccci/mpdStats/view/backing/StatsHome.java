@@ -190,7 +190,7 @@ public class StatsHome
             {
                 throw new ValidatorException(new FacesMessage(
                         String.format("%s is after this Sunday. " + 
-                                "Please choose this Saturday %s or a previous Sunday.", 
+                                "Please choose this Sunday %s or a previous Sunday.", 
                                 reportPeriodEnd, thisReportPeriodEnd)));
             }
         }
