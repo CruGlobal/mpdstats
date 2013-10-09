@@ -161,20 +161,39 @@ public class StatsHome
         
         if (!ReportPeriod.isAValidReportPeriodEndDate(reportPeriodEnd))
         {
-            throw new ValidatorException(new FacesMessage(
-               String.format("%s is not a valid report end date; please choose a date that is.  " + 
-                        "Before 10/7/13, Saturdays are valid dates, after 10/7/13, Sundays are valid.", reportPeriodEnd)));
+            if(reportPeriodEnd.isBefore(ReportPeriod.getNewReportPeriodStartDate()))
+            {
+                throw new ValidatorException(new FacesMessage(
+                           String.format("%s is not a Sunday; please choose a date that is.", 
+                           reportPeriodEnd)));
+            }
+            else
+            {
+                throw new ValidatorException(new FacesMessage(
+                        String.format("%s is not a Saturday; please choose a date that is. " +
+                        "(Up until %s, report end dates are Saturdays; after that, they are Sundays)", 
+                        reportPeriodEnd, ReportPeriod.getNewReportPeriodStartDate())));
+            }
         }
         
         LocalDate thisReportPeriodEnd = ReportPeriod.getReportPeriodEndForDayInPeriod(new LocalDate());
         if ( reportPeriodEnd.isAfter(thisReportPeriodEnd) )
         {
-            throw new ValidatorException(new FacesMessage(
-                String.format("%s is after the end of this report period. " + 
-                        "Please choose this report period end date %s or a previous report period end date.", 
-                        reportPeriodEnd, thisReportPeriodEnd)));
+            if(reportPeriodEnd.isBefore(ReportPeriod.getNewReportPeriodStartDate()))
+            {
+                throw new ValidatorException(new FacesMessage(
+                        String.format("%s is after this Saturday. " + 
+                                "Please choose this Saturday %s or a previous Saturday.", 
+                                reportPeriodEnd, thisReportPeriodEnd)));
+            }
+            else
+            {
+                throw new ValidatorException(new FacesMessage(
+                        String.format("%s is after this Sunday. " + 
+                                "Please choose this Saturday %s or a previous Sunday.", 
+                                reportPeriodEnd, thisReportPeriodEnd)));
+            }
         }
-        
     }
     
     public void validateLastPrayerLetterDate(FacesContext context, UIComponent toValidate,

@@ -180,6 +180,11 @@ public class ReportPeriod extends ValueObject implements Serializable, Comparabl
     {
         return reportPeriodEnd.equals(getReportPeriodEndForDayInPeriod(reportPeriodEnd));
     }
+    
+    public static LocalDate getNewReportPeriodStartDate()
+    {
+        return REFERENCE_REPORT_PERIOD_START_NEW;
+    }
 
     private static final long serialVersionUID = 1L;
 }
