@@ -123,7 +123,6 @@ public class ReportPeriod extends ValueObject implements Serializable, Comparabl
     public static LocalDate getReportPeriodEndForDayInPeriod(LocalDate localDate)
     {
         int daysBetween;
-        int dayInReportPeriod;
         
         /*
          * Set up a break between Sunday start dates and Monday start dates.  
@@ -133,17 +132,20 @@ public class ReportPeriod extends ValueObject implements Serializable, Comparabl
          * continue loading properly, while also supporting the proper report 
          * start dates going forward.
          */
-        if(localDate.isBefore(REFERENCE_REPORT_PERIOD_START_NEW))
+        if(localDate.isEqual(REFERENCE_REPORT_PERIOD_START_NEW.minusDays(1)))
         {
-        	daysBetween = Days.daysBetween(REFERENCE_REPORT_PERIOD_START_OLD, localDate).getDays();
-        	dayInReportPeriod = Math.mod(daysBetween, 7);
+            return localDate.plusWeeks(1);
+        }
+        else if(localDate.isBefore(REFERENCE_REPORT_PERIOD_START_NEW))
+        {
+            daysBetween = Days.daysBetween(REFERENCE_REPORT_PERIOD_START_OLD, localDate).getDays();
         }
         else
         {
-        	daysBetween = Days.daysBetween(REFERENCE_REPORT_PERIOD_START_NEW, localDate).getDays();
-        	dayInReportPeriod = Math.mod(daysBetween, 7);
+            daysBetween = Days.daysBetween(REFERENCE_REPORT_PERIOD_START_NEW, localDate).getDays();
         }
         
+        int dayInReportPeriod = Math.mod(daysBetween, 7);
         return localDate.plusDays(6 - dayInReportPeriod);
     }
 
