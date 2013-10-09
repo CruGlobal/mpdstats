@@ -162,7 +162,8 @@ public class StatsHome
         if (!ReportPeriod.isAValidReportPeriodEndDate(reportPeriodEnd))
         {
             throw new ValidatorException(new FacesMessage(
-               String.format("%s is not a valid report end date; please choose a date that is", reportPeriodEnd)));
+               String.format("%s is not a valid report end date; please choose a date that is.  " + 
+                        "Before 10/7/13, Saturdays are valid dates, after 10/7/13, Sundays are valid.", reportPeriodEnd)));
         }
         
         LocalDate thisReportPeriodEnd = ReportPeriod.getReportPeriodEndForDayInPeriod(new LocalDate());
@@ -170,14 +171,14 @@ public class StatsHome
         {
             throw new ValidatorException(new FacesMessage(
                 String.format("%s is after the end of this report period. " + 
-                		"Please choose this report period end date %s or a previous report period end date.", 
-                		reportPeriodEnd, thisReportPeriodEnd)));
+                        "Please choose this report period end date %s or a previous report period end date.", 
+                        reportPeriodEnd, thisReportPeriodEnd)));
         }
         
     }
     
     public void validateLastPrayerLetterDate(FacesContext context, UIComponent toValidate,
-    										 Object value) throws ValidatorException
+                                       Object value) throws ValidatorException
     {
         Preconditions.checkArgument(value instanceof LocalDate, 
                 "value (%s) is of type %s, not of type %s", 
