@@ -344,5 +344,8 @@ public class StatsHome
         return sessionYear;
     }
 
-
+    public boolean isBeforeNewReportEndDate(LocalDate localDate)
+    {
+    	return localDate.isBefore(ReportPeriod.getNewReportPeriodStartDate());
+    }
 }
