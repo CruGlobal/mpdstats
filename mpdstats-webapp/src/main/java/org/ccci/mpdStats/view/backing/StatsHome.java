@@ -163,16 +163,16 @@ public class StatsHome
         {
             if(reportPeriodEnd.isBefore(ReportPeriod.getNewReportPeriodStartDate()))
             {
-                throw new ValidatorException(new FacesMessage(
-                           String.format("%s is not a Sunday; please choose a date that is.", 
-                           reportPeriodEnd)));
-            }
-            else
-            {
-                throw new ValidatorException(new FacesMessage(
+            	throw new ValidatorException(new FacesMessage(
                         String.format("%s is not a Saturday; please choose a date that is. " +
                         "(Up until %s, report end dates are Saturdays; after that, they are Sundays)", 
                         reportPeriodEnd, ReportPeriod.getNewReportPeriodStartDate())));
+            }
+            else
+            {
+            	throw new ValidatorException(new FacesMessage(
+                        String.format("%s is not a Sunday; please choose a date that is.", 
+                        reportPeriodEnd)));
             }
         }
         
