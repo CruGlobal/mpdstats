@@ -32,7 +32,7 @@
    </event>
    <!-- a corresponding #{redirect.returnToCapturedView} occurs in pages.xml after the login page action -->
 
-   <mail:mail-session host="smtp1.ccci.org"/>
+   <mail:mail-session host="smtp1.ccci.org" tls="false"/>
 
    <!-- For exception reporting by email.  See org.ccci.debug.ExceptionReporter for more info -->
    <component name="exceptionReporter">
