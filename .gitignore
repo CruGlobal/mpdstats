@@ -11,10 +11,12 @@
 # /mpdstats-deployments/
 /mpdstats-deployments/target
 /mpdstats-deployments/*.iml
+/mpdstats-deployments/src/main/resources/*-ds.xml
 
 # /mpdstats-jbossconfig/
 /mpdstats-jbossconfig/target
 /mpdstats-jbossconfig/*.iml
+/mpdstats-jbossconfig/src/main/resources/*-ds.xml
 
 # /mpdstats-model/
 /mpdstats-model/target
