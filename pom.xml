@@ -56,10 +56,7 @@
   </ciManagement>
     
   <scm>
-    <connection>scm:svn:http://arkham.ccci.org/svn/java/trunk/apps/webapp-mpdstats/</connection>
-    <developerConnection>scm:svn:http://arkham.ccci.org/svn/java/trunk/apps/webapp-mpdstats/</developerConnection>
-      <!-- no fisheye yet: -->
-    <url>scm:svn:http://arkham.ccci.org/svn/java/trunk/apps/webapp-mpdstats/</url>
+    <developerConnection>scm:git:https://github.com/CruGlobal/mpdstats.git</developerConnection>
   </scm>
         
         
