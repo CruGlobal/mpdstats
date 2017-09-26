@@ -1,0 +1,32 @@
+
+# /
+/target
+/*.iml
+/.idea
+
+# /mpdstats-db/
+/mpdstats-db/target
+/mpdstats-db/*.iml
+
+# /mpdstats-deployments/
+/mpdstats-deployments/target
+/mpdstats-deployments/*.iml
+
+# /mpdstats-jbossconfig/
+/mpdstats-jbossconfig/target
+/mpdstats-jbossconfig/*.iml
+
+# /mpdstats-model/
+/mpdstats-model/target
+/mpdstats-model/*.iml
+
+# /mpdstats-pshcm-persistence/
+/mpdstats-pshcm-persistence/target
+/mpdstats-pshcm-persistence/*.iml
+
+# /mpdstats-webapp/
+/mpdstats-webapp/target
+/mpdstats-webapp/*.iml
+
+# /work/
+/work/*
