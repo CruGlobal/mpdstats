@@ -122,15 +122,7 @@
             <artifactId>maven-clover2-plugin</artifactId>
             <version>${clover.version}</version>
             <configuration>
-              <license>
-                <![CDATA[
-                  OQMqSgqoojKAgEXeriuMRBgNRPvVctMXkMfdKmCXPPnxmt
-                  mi2Kmhc<0mscGaN8wuCEdCpS2KZ9u0FyK6JhixyJXw9lI9
-                  QQQntxRPRQPMRopQPqNxtqpNPmOQnQpmMPXXsVsWvUpvwu
-                  tsUWMWSUmVUxxsxuuMnmomUUnooqsumqmmmmmUUnooqsum
-                  qmmmmmUU3XjmrpW3orpXabWcloW3eofpqUUn
-                ]]>
-              </license>
+              <license>${clover.license}</license>
             </configuration>
         </plugin>
         
