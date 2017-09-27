@@ -1,4 +1,4 @@
-####Developer Notes
+#### Developer Notes
 In order to build this project, you will need to create a file on your local machine called `dev-mpdstats-ds.xml`
 under `mpdstats-jbossconfig/src/main/resources`. You can find the proper values on the servers. 
 
