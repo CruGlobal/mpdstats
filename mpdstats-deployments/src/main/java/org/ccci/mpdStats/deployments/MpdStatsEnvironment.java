@@ -60,7 +60,6 @@ public enum MpdStatsEnvironment
     {
         return ImmutableSet.of(
             EmailAddress.valueOf("matt.drees@ccci.org"),
-            EmailAddress.valueOf("ben.sisson@ccci.org"),
             EmailAddress.valueOf("ryan.t.carlson@ccci.org"),
             EmailAddress.valueOf("william.randall@cru.org"),
             EmailAddress.valueOf("steve.bratton@ccci.org"),
